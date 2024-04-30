@@ -1,0 +1,27 @@
+Falta:
+- atributo composto
+- atributo multivalorado
+- cardinalidades diversas
+- atributo de relacionamento
+- agregação ou ternário
+- entidade fraca
+
+
+- descrever o minimundo:
+
+Um armazém precisa controlar seu estoque ao longo do tempo.
+
+O que o armazém armazena são itens, que têm identificador único, podem ou não ter validade, representam uma "instância" de um produto e tem fornecedor.
+
+Produtos representam um modelo de produto e tem uma categoria, nome e descrição.
+ 
+Fornecedores tem um cnpj, endereço com estado, municipio, CEP, logradouro, numero e complemento, telefone e e-mail.
+
+A entrada ou saída de itens são consideradas transações em relação ao estoque e devem ser registradas necessariamente por um funcionário. Cada transação tem um valor de data e hora associado.
+
+As transações podem ser de entrada (aquisição de produtos) ou saída (venda ou perda de produtos). O valor de cada item pode variar ao longo de sua vida no estoque (i.e. entrar por um valor de compra distinto do valor de venda pelo qual sair). A estimativa de prejuízo no caso de perda corresponde ao preço médio de venda do item por produto.*
+
+Funcionários têm cpf, nome, data de nascimento, endereço (idêntico ao de fornecedor), telefone e e-mail. Funcionários podem ser supervisores de outros funcionários; nesse caso, podem emitir relatórios em relação às transações de seus subordinados.
+
+Clientes têm cpf, nome, endereço, telefone e e-mail.
+

@@ -9,19 +9,32 @@ Falta:
 
 - descrever o minimundo:
 
-Um armazém precisa controlar seu estoque ao longo do tempo.
+Um armazém precisa controlar seu estoque ao longo do tempo e as respectivas transações.
 
 O que o armazém armazena são itens, que têm identificador único, podem ou não ter validade, representam uma "instância" de um produto e tem fornecedor.
 
 Produtos representam um modelo de produto e tem uma categoria, nome e descrição.
  
-Fornecedores tem um cnpj, endereço com estado, municipio, CEP, logradouro, numero e complemento, telefone e e-mail.
+Fornecedores tem um cnpj, endereço (com estado, municipio, CEP, logradouro, numero e complemento) e dados de contato (telefone e e-mail).
 
 A entrada ou saída de itens são consideradas transações em relação ao estoque e devem ser registradas necessariamente por um funcionário. Cada transação tem um valor de data e hora associado.
 
-As transações podem ser de entrada (aquisição de produtos) ou saída (venda ou perda de produtos). O valor de cada item pode variar ao longo de sua vida no estoque (i.e. entrar por um valor de compra distinto do valor de venda pelo qual sair). A estimativa de prejuízo no caso de perda corresponde ao preço médio de venda do item por produto.*
+Funcionários têm cpf, nome, data de nascimento, endereço, telefone e e-mail. Funcionários podem ser supervisores de outros funcionários; nesse caso, podem emitir relatórios em relação às transações de seus subordinados.
 
-Funcionários têm cpf, nome, data de nascimento, endereço (idêntico ao de fornecedor), telefone e e-mail. Funcionários podem ser supervisores de outros funcionários; nesse caso, podem emitir relatórios em relação às transações de seus subordinados.
+As transações podem ser de entrada (aquisição de produtos) ou saída (venda ou perda de produtos). O valor de cada item pode variar ao longo de sua vida no estoque (i.e. entrar por um valor de compra distinto do valor de venda pelo qual sair), e portanto deve ser registrado a cada transação. Quando há perda, o valor do item é zerado na transação.
 
-Clientes têm cpf, nome, endereço, telefone e e-mail.
+Quando a transação é uma venda, é preciso haver um cliente relacionado. A venda combinada com seu cliente respectivo compõe uma compra. Cada compra gera um envio dos itens relacionados. 
+
+Envio possui um valor de data e hora da expedição dos itens, um código de rastreamento e está associado a uma transportadora parceira específica. Opcionalmente, pode conter uma observação inserida pelo cliente.
+
+Clientes têm cpf, nome, endereço (com estado, municipio, CEP, logradouro, numero e complemento) e dados de contato (telefone e e-mail) e podem ter um número arbitrário de endereços de entrega.
+
+Endereços de entrega incluem nome do destinatário e endereço.
+
+Transportadoras têm cpnj, endereço com estado, municipio, CEP, logradouro, numero e complemento, telefone e e-mail.
+
+*Observações:
+Endereço sempre implica estado, municipio, CEP, logradouro, numero e complemento
+Dados de contato sempre implica telefone e e-mail
+
 

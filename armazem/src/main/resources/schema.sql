@@ -1,0 +1,8 @@
+CREATE DATABASE IF NOT EXISTS storage;
+USE storage;
+
+CREATE TABLE IF NOT EXISTS category (
+    id VARCHAR(36) NOT NULL,
+    cat_name VARCHAR(255) NOT NULL UNIQUE,
+    PRIMARY KEY (id)
+);

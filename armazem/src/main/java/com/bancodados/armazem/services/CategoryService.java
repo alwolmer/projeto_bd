@@ -19,30 +19,30 @@ public class CategoryService {
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
-    public Category createCategory(@RequestBody TokenRefreshRequest.CategoryRequest request) {
-
-        try {
-            String uuid = UUID.randomUUID().toString();
-            String sql = "INSERT INTO category (id, cat_name) VALUES (?, ?)";
-            jdbcTemplate.update(sql, uuid, request.getName());
-            return new Category(uuid, request.getName());
-        } catch (Exception e) {
-            return null;
-        }
-
-    }
-
-    public List<Category> getAllCategories() {
-        String sql = "SELECT * FROM category";
-        return jdbcTemplate.query(sql, new CategoryRowMapper());
-    }
-
-    private static class CategoryRowMapper implements RowMapper<Category> {
-        @Override
-        public Category mapRow(ResultSet rs, int rowNum) throws SQLException {
-            String id = rs.getString("id");
-            String name = rs.getString("cat_name");
-            return new Category(id, name);
-        }
-    }
+//    public Category createCategory(@RequestBody TokenRefreshRequest.CategoryRequest request) {
+//
+//        try {
+//            String uuid = UUID.randomUUID().toString();
+//            String sql = "INSERT INTO category (id, cat_name) VALUES (?, ?)";
+//            jdbcTemplate.update(sql, uuid, request.getName());
+//            return new Category(uuid, request.getName());
+//        } catch (Exception e) {
+//            return null;
+//        }
+//
+//    }
+//
+//    public List<Category> getAllCategories() {
+//        String sql = "SELECT * FROM category";
+//        return jdbcTemplate.query(sql, new CategoryRowMapper());
+//    }
+//
+//    private static class CategoryRowMapper implements RowMapper<Category> {
+//        @Override
+//        public Category mapRow(ResultSet rs, int rowNum) throws SQLException {
+//            String id = rs.getString("id");
+//            String name = rs.getString("cat_name");
+//            return new Category(id, name);
+//        }
+//    }
 }

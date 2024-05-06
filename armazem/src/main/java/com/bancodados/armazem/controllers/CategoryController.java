@@ -16,18 +16,18 @@ public class CategoryController {
     @Autowired
     private CategoryService categoryService;
 
-    @PostMapping
-    public ResponseEntity<Category> createCategory(@RequestBody TokenRefreshRequest.CategoryRequest request) {
-        Category createdCategory = categoryService.createCategory(request);
-        if (createdCategory == null) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
-        return ResponseEntity.status(HttpStatus.CREATED).body(createdCategory);
-    }
-
-    @GetMapping
-    public ResponseEntity<List<Category>> getAllCategories() {
-        return ResponseEntity.ok(categoryService.getAllCategories());
-    }
+//    @PostMapping
+//    public ResponseEntity<Category> createCategory(@RequestBody TokenRefreshRequest.CategoryRequest request) {
+//        Category createdCategory = categoryService.createCategory(request);
+//        if (createdCategory == null) {
+//            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+//        }
+//        return ResponseEntity.status(HttpStatus.CREATED).body(createdCategory);
+//    }
+//
+//    @GetMapping
+//    public ResponseEntity<List<Category>> getAllCategories() {
+//        return ResponseEntity.ok(categoryService.getAllCategories());
+//    }
 
 }

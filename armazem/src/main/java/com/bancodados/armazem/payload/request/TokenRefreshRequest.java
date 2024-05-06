@@ -10,11 +10,4 @@ import lombok.Setter;
 public class TokenRefreshRequest {
     private String refresh;
 
-    @Getter
-    @Setter
-    @AllArgsConstructor
-    @NoArgsConstructor
-    public static class CategoryRequest {
-        private String name;
-    }
 }

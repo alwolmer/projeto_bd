@@ -1,0 +1,18 @@
+import axios, { AxiosError } from "axios";
+
+export const signIn = async (email: string, password: string) => {
+  const tokens = await axios
+    .post("http://localhost:8080/api/v1/auth/login", {
+      email,
+      password,
+    })
+    .then((response) => response.data)
+    .catch((err: AxiosError) => {
+      if (err.response?.status === 401 || err.response?.status === 400) {
+        throw new Error("Invalid credentials");
+      }
+      throw new Error(err.message);
+    });
+
+  return tokens;
+};

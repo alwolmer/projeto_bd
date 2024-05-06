@@ -7,6 +7,7 @@ import com.bancodados.armazem.exception.TokenRefreshException;
 import com.bancodados.armazem.models.Employee;
 import com.bancodados.armazem.models.RefreshToken;
 import com.bancodados.armazem.payload.request.TokenRefreshRequest;
+import com.bancodados.armazem.payload.response.CurrentEmployeeResponse;
 import com.bancodados.armazem.payload.response.JwtResponse;
 import com.bancodados.armazem.payload.response.MessageResponse;
 import com.bancodados.armazem.payload.response.TokenRefreshResponse;
@@ -79,5 +80,12 @@ public class AuthenticationController {
         String cpf = userDetails.getCpf();
         refreshTokenService.deleteByEmployeeCpf(cpf);
         return ResponseEntity.ok(new MessageResponse("You have been logged out successfully"));
+    }
+
+    @GetMapping("/me")
+    public ResponseEntity<?> me() {
+        UserDetailsImpl userDetails = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        CurrentEmployeeResponse response =  new CurrentEmployeeResponse(userDetails);
+        return ResponseEntity.ok().body(response);
     }
 }

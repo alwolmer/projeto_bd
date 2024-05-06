@@ -62,7 +62,6 @@ public class WebSecurityConfig {
                     .permitAll()
                     .anyRequest()
                     .authenticated()
-
             );
 
         http.authenticationProvider(daoAuthenticationProvider());

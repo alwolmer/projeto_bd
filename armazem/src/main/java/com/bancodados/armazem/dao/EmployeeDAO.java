@@ -42,6 +42,7 @@ public class EmployeeDAO {
         newEmployee.setComplement(employee.getComplement());
         newEmployee.setEmail(employee.getEmail());
         newEmployee.setPhone(employee.getPhone());
+        newEmployee.setPasswordHash(encodedPassword);
         employeeRepository.save(newEmployee);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(new MessageResponse("Employee registered successfully"));

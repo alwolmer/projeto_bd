@@ -3,6 +3,7 @@ package com.bancodados.armazem.services;
 import com.bancodados.armazem.dtos.LoginUserDto;
 import com.bancodados.armazem.dtos.RegisterEmployeeDto;
 import com.bancodados.armazem.models.Employee;
+import com.bancodados.armazem.repository.EmployeeRepository;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -10,12 +11,12 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class AuthenticationService {
-    private final EmployeeService employeeService;
+    private final EmployeeRepository employeeRepository;
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
 
-    public AuthenticationService(EmployeeService employeeService, PasswordEncoder passwordEncoder, AuthenticationManager authenticationManager) {
-        this.employeeService = employeeService;
+    public AuthenticationService(EmployeeRepository employeeRepository, PasswordEncoder passwordEncoder, AuthenticationManager authenticationManager) {
+        this.employeeRepository = employeeRepository;
         this.passwordEncoder = passwordEncoder;
         this.authenticationManager = authenticationManager;
     }
@@ -34,17 +35,17 @@ public class AuthenticationService {
         employee.setPasswordHash(passwordEncoder.encode(input.getPassword()));
 
 
-        return employeeService.save(employee);
+        return employeeRepository.save(employee);
     }
 
     public Employee authenticate(LoginUserDto input) {
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
-                        input.getEmail(),
+                        input.getCpf(),
                         input.getPassword()
                 )
         );
 
-        return employeeService.findByEmail(input.getEmail());
+        return employeeRepository.findByCpf(input.getCpf()).get();
     }
 }

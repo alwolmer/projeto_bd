@@ -1,9 +1,9 @@
 import axios, { AxiosError } from "axios";
 
-export const signIn = async (email: string, password: string) => {
+export const signIn = async (cpf: string, password: string) => {
   const tokens = await axios
     .post("http://localhost:8080/api/v1/auth/login", {
-      email,
+      cpf,
       password,
     })
     .then((response) => response.data)

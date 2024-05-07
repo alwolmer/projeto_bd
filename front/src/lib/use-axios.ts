@@ -3,6 +3,7 @@ import { jwtDecode } from "jwt-decode";
 import dayjs from "dayjs";
 
 import { useAuthStore } from "@/store/auth-store";
+import { redirect } from "@tanstack/react-router";
 
 const baseURL = "http://localhost:8080/api/v1";
 
@@ -23,14 +24,21 @@ export const useAxios = () => {
 
     if (!isExpired) return req;
 
-    const response = await axios.post(`${baseURL}/auth/refresh`, {
-      refresh: refreshToken,
-    });
+    const response = await axios
+      .post(`${baseURL}/auth/refresh`, {
+        refresh: refreshToken,
+      })
+      .then((res) => res.data)
+      .catch(() => {
+        throw redirect({
+          to: "/login",
+        });
+      });
 
-    setRefreshToken(response.data.refresh);
-    setToken(response.data.access);
+    setRefreshToken(response.refresh);
+    setToken(response.access);
 
-    req.headers.Authorization = `Bearer ${response.data.access}`;
+    req.headers.Authorization = `Bearer ${response.access}`;
     return req;
   });
 

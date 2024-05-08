@@ -23,13 +23,20 @@ public class EmployeeDAO {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    public ResponseEntity<?> register(RegisterEmployeeDto employee) {
+    public enum RegisterResponse {
+        EXISTS_CPF,
+        EXISTS_EMAIL,
+        ERROR,
+        SUCCESS
+    }
+
+    public RegisterResponse register(RegisterEmployeeDto employee) {
         if (employeeRepository.existsByCpf(employee.getCpf())) {
-            return ResponseEntity.badRequest().body(new MessageResponse("Employee with this CPF already exists"));
+            return RegisterResponse.EXISTS_CPF;
         }
 
         if (employeeRepository.existsByEmail(employee.getEmail())) {
-            return ResponseEntity.badRequest().body(new MessageResponse("Employee with this email already exists"));
+            return RegisterResponse.EXISTS_EMAIL;
         }
         Employee newEmployee = new Employee();
         String encodedPassword = passwordEncoder.encode(employee.getPassword());
@@ -38,13 +45,15 @@ public class EmployeeDAO {
         newEmployee.setState(employee.getState());
         newEmployee.setCity(employee.getCity());
         newEmployee.setZip(employee.getZip());
+        newEmployee.setStreet(employee.getStreet());
         newEmployee.setNumber(employee.getNumber());
         newEmployee.setComplement(employee.getComplement());
         newEmployee.setEmail(employee.getEmail());
         newEmployee.setPhone(employee.getPhone());
         newEmployee.setPasswordHash(encodedPassword);
-        employeeRepository.save(newEmployee);
-
-        return ResponseEntity.status(HttpStatus.CREATED).body(new MessageResponse("Employee registered successfully"));
+        if (employeeRepository.save(newEmployee) != null) {
+            return RegisterResponse.SUCCESS;
+        }
+        return RegisterResponse.ERROR;
     }
 }

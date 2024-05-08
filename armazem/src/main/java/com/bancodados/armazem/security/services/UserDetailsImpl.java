@@ -25,6 +25,8 @@ public class UserDetailsImpl implements UserDetails {
     @Getter
     private String zip;
     @Getter
+    private String street;
+    @Getter
     private String number;
     @Getter
     private String complement;
@@ -39,12 +41,13 @@ public class UserDetailsImpl implements UserDetails {
 
     private Collection<? extends GrantedAuthority> authorities;
 
-    public UserDetailsImpl(String cpf, String name, String state, String city, String zip, String number, String complement, String phone, String email, String passwordHash, String managerCpf ,Collection<? extends GrantedAuthority> authorities) {
+    public UserDetailsImpl(String cpf, String name, String state, String city, String zip, String street, String number, String complement, String phone, String email, String passwordHash, String managerCpf ,Collection<? extends GrantedAuthority> authorities) {
         this.cpf = cpf;
         this.name = name;
         this.state = state;
         this.city = city;
         this.zip = zip;
+        this.street = street;
         this.number = number;
         this.complement = complement;
         this.phone = phone;
@@ -63,6 +66,7 @@ public class UserDetailsImpl implements UserDetails {
                 employee.getState(),
                 employee.getCity(),
                 employee.getZip(),
+                employee.getStreet(),
                 employee.getNumber(),
                 employee.getComplement(),
                 employee.getPhone(),

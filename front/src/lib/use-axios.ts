@@ -4,6 +4,7 @@ import dayjs from "dayjs";
 
 import { useAuthStore } from "@/store/auth-store";
 import { redirect } from "@tanstack/react-router";
+import { toast } from "sonner";
 
 const baseURL = "http://localhost:8080/api/v1";
 
@@ -30,6 +31,7 @@ export const useAxios = () => {
       })
       .then((res) => res.data)
       .catch(() => {
+        toast.error("Error refreshing token");
         throw redirect({
           to: "/login",
         });

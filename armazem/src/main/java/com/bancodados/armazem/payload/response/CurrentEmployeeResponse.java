@@ -12,6 +12,7 @@ public class CurrentEmployeeResponse {
     private String state;
     private String city;
     private String zip;
+    private String street;
     private String number;
     private String complement;
     private String phone;
@@ -24,6 +25,7 @@ public class CurrentEmployeeResponse {
         this.state = userDetails.getState();
         this.city = userDetails.getCity();
         this.zip = userDetails.getZip();
+        this.street = userDetails.getStreet();
         this.number = userDetails.getNumber();
         this.complement = userDetails.getComplement();
         this.phone = userDetails.getPhone();

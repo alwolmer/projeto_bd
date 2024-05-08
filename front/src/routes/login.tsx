@@ -15,6 +15,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useAuthStore } from "@/store/auth-store";
 import { signIn } from "@/api/authApi";
+import { toast } from "sonner";
 
 export const Route = createFileRoute("/login")({
   beforeLoad: async () => {
@@ -63,14 +64,13 @@ function LoginForm() {
       const { cpf, password } = value;
       await signIn(cpf, password)
         .then((response) => {
-          setToken(response.access);
+          setToken(response.token);
           setRefreshToken(response.refresh);
           navigate({ to: "/" });
         })
         .catch((err) => {
-          console.error(err);
+          toast.error(err.message);
         });
-      //TODO: redirect to home
     },
   });
 

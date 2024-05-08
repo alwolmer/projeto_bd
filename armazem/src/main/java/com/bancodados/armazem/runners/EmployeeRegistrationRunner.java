@@ -1,8 +1,9 @@
 package com.bancodados.armazem.runners;
 
+import com.bancodados.armazem.dao.EmployeeDAO;
 import com.bancodados.armazem.dtos.RegisterEmployeeDto;
-import com.bancodados.armazem.services.AuthenticationService;
-import com.bancodados.armazem.services.EmployeeService;
+import com.bancodados.armazem.repository.EmployeeRepository;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
@@ -12,16 +13,16 @@ import java.util.Scanner;
 @Component
 public class EmployeeRegistrationRunner implements CommandLineRunner {
     @Autowired
-    private EmployeeService employeeService;
+    private EmployeeRepository employeeRepository;
 
     @Autowired
-    private AuthenticationService authenticationService;
+    private EmployeeDAO employeeDAO;
 
 
     @Override
     public void run(String... args) throws Exception {
         System.out.println("Welcome to the Armazem");
-        if (employeeService.getEmployeeCount() > 0) {
+        if (employeeRepository.getEmployeeCount() > 0) {
             return;
         }
 
@@ -38,6 +39,8 @@ public class EmployeeRegistrationRunner implements CommandLineRunner {
             String employeeCity = scanner.nextLine();
             System.out.print("Enter employee Zip: ");
             String employeeZip = scanner.nextLine();
+            System.out.print("Enter employee address Street: ");
+            String employeeAddressStreet = scanner.nextLine();
             System.out.print("Enter employee address Number: ");
             String employeeNumber = scanner.nextLine();
             System.out.print("Enter employee address Complement: ");
@@ -55,6 +58,7 @@ public class EmployeeRegistrationRunner implements CommandLineRunner {
             input.setState(employeeState);
             input.setCity(employeeCity);
             input.setZip(employeeZip);
+            input.setStreet(employeeAddressStreet);
             input.setNumber(employeeNumber);
             input.setComplement(employeeComplement);
             input.setPhone(employeePhone);
@@ -62,9 +66,14 @@ public class EmployeeRegistrationRunner implements CommandLineRunner {
             input.setPassword(employeePassword);
 
 
-            authenticationService.signup(input);
+            EmployeeDAO.RegisterResponse response = employeeDAO.register(input);
 
-            System.out.println("Employee registration complete.");
+            switch (response) {
+                case SUCCESS:
+                    System.out.println("Employee registered successfully");
+                case ERROR:
+                    System.out.println("Employee registration failed");
+            }
         } catch (Exception e) {
             System.err.println("An error occurred during registration: " + e.getMessage());
         }

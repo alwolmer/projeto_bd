@@ -1,7 +1,8 @@
+import { LoginResponse } from "@/types/auth";
 import axios, { AxiosError } from "axios";
 
 export const signIn = async (cpf: string, password: string) => {
-  const tokens = await axios
+  const tokens: LoginResponse = await axios
     .post("http://localhost:8080/api/v1/auth/login", {
       cpf,
       password,

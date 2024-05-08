@@ -15,6 +15,7 @@ public class RegisterEmployeeDto {
     private String state;
     private String city;
     private String zip;
+    private String street;
     private String number;
     private String complement;
     private String phone;

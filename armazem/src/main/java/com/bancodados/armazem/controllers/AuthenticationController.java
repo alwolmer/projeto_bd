@@ -45,7 +45,14 @@ public class AuthenticationController {
 
     @PostMapping("/signup")
     public ResponseEntity<?> register(@RequestBody RegisterEmployeeDto registerEmployeeDto) {
-        return employeeDAO.register(registerEmployeeDto);
+        EmployeeDAO.RegisterResponse response = employeeDAO.register(registerEmployeeDto);
+        return switch (response) {
+            case SUCCESS -> ResponseEntity.ok().body(new MessageResponse("Successfully registered"));
+            case ERROR -> ResponseEntity.ok().body(new MessageResponse("Error"));
+            case EXISTS_CPF -> ResponseEntity.ok().body(new MessageResponse("CPF already exists"));
+            case EXISTS_EMAIL -> ResponseEntity.ok().body(new MessageResponse("Email already exists"));
+        };
+
     }
 
     @PostMapping("/login")

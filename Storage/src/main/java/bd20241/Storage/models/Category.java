@@ -1,4 +1,4 @@
-package bd20241.Storage.payloads.responses;
+package bd20241.Storage.models;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -7,10 +7,9 @@ import lombok.Setter;
 
 @Getter
 @Setter
-@NoArgsConstructor
 @AllArgsConstructor
-public class LoginResponse {
-    private String access;
-    private String refresh;
- 
+@NoArgsConstructor
+public class Category {
+    private String id;
+    private String name;
 }

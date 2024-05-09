@@ -14,8 +14,6 @@ import { Route as rootRoute } from './routes/__root'
 import { Route as LoginImport } from './routes/login'
 import { Route as AuthImport } from './routes/auth'
 import { Route as IndexImport } from './routes/index'
-import { Route as DashboardIndexImport } from './routes/dashboard/index'
-import { Route as DashboardHomeImport } from './routes/dashboard/home'
 import { Route as AuthDashboardImport } from './routes/auth.dashboard'
 
 // Create/Update Routes
@@ -32,16 +30,6 @@ const AuthRoute = AuthImport.update({
 
 const IndexRoute = IndexImport.update({
   path: '/',
-  getParentRoute: () => rootRoute,
-} as any)
-
-const DashboardIndexRoute = DashboardIndexImport.update({
-  path: '/dashboard/',
-  getParentRoute: () => rootRoute,
-} as any)
-
-const DashboardHomeRoute = DashboardHomeImport.update({
-  path: '/dashboard/home',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -70,14 +58,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthDashboardImport
       parentRoute: typeof AuthImport
     }
-    '/dashboard/home': {
-      preLoaderRoute: typeof DashboardHomeImport
-      parentRoute: typeof rootRoute
-    }
-    '/dashboard/': {
-      preLoaderRoute: typeof DashboardIndexImport
-      parentRoute: typeof rootRoute
-    }
   }
 }
 
@@ -87,8 +67,6 @@ export const routeTree = rootRoute.addChildren([
   IndexRoute,
   AuthRoute.addChildren([AuthDashboardRoute]),
   LoginRoute,
-  DashboardHomeRoute,
-  DashboardIndexRoute,
 ])
 
 /* prettier-ignore-end */

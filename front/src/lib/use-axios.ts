@@ -6,7 +6,7 @@ import { useAuthStore } from "@/store/auth-store";
 import { redirect } from "@tanstack/react-router";
 import { toast } from "sonner";
 
-const baseURL = "http://localhost:8080/api/v1";
+const baseURL = "http://localhost:8080/";
 
 export const useAxios = () => {
   const { token, refreshToken, setToken, setRefreshToken } = useAuthStore();

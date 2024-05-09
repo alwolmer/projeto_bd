@@ -6,19 +6,20 @@ export interface AuthStore {
 }
 
 export interface LoginResponse {
-  token: string;
+  access: string;
   refresh: string;
 }
 
-export interface User {
+export interface Employee {
   cpf: string;
   name: string;
+  email: string;
+  phone: string;
   state: string;
   city: string;
   zip: string;
+  street: string;
   number: string;
   complement: string;
-  phone: string;
-  email: string;
   managerCpf: string | null;
 }

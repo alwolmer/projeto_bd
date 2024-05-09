@@ -18,27 +18,7 @@ export const Route = createFileRoute("/")({
       });
     }
     throw redirect({
-      to: "/dashboard",
+      to: "/auth/dashboard",
     });
   },
 });
-
-// function Index() {
-//   const api = useAxios();
-
-//   const { isPending, error, data } = useQuery(userFetch(api));
-
-//   if (isPending) {
-//     return <div>Loading...</div>;
-//   }
-
-//   if (error) {
-//     return <div>Error: {error.message}</div>;
-//   }
-
-//   return (
-//     <div className="p-2">
-//       <h3>{data.name}</h3>
-//     </div>
-//   );
-// }

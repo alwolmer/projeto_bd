@@ -28,6 +28,11 @@ public class CategoryRepository {
         return jdbcTemplate.query(sql, new CategoryRowMapper());
     }
 
+    public void deleteById(String id) {
+        String sql = "DELETE FROM category WHERE id = ?";
+        jdbcTemplate.update(sql, id);
+    }
+
     private static class CategoryRowMapper implements RowMapper<Category> {
         @Override
         public Category mapRow(ResultSet rs, int rowNum) throws SQLException {

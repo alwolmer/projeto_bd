@@ -64,7 +64,7 @@ function LoginForm() {
       const { cpf, password } = value;
       await signIn(cpf, password)
         .then((response) => {
-          setToken(response.token);
+          setToken(response.access);
           setRefreshToken(response.refresh);
           navigate({ to: "/" });
         })

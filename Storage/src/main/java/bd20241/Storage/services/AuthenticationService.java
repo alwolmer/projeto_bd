@@ -49,4 +49,5 @@ public class AuthenticationService {
 
         return employeeRepository.findByCpf(input.getCpf()).orElseThrow();
     }
+
 }

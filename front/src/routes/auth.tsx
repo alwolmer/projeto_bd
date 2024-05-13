@@ -1,12 +1,13 @@
 import { userFetch } from "@/api/queries";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
+  DropdownMenuLabel,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { Separator } from "@/components/ui/separator";
 import { useAxios } from "@/lib/use-axios";
 import { useAuthStore } from "@/store/auth-store";
 import { useQuery } from "@tanstack/react-query";
@@ -56,18 +57,14 @@ function Navbar() {
           Armazém do Seu Zé
         </Link>{" "}
         <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button
-              variant="outline"
-              size="icon"
-              className="overflow-hidden rounded-full"
-            >
-              <Avatar>
-                <AvatarFallback>{data?.name[0]}</AvatarFallback>
-              </Avatar>
-            </Button>
+          <DropdownMenuTrigger>
+            <Avatar>
+              <AvatarFallback>{data?.name[0]}</AvatarFallback>
+            </Avatar>
           </DropdownMenuTrigger>
           <DropdownMenuContent>
+            <DropdownMenuLabel>{data.name}</DropdownMenuLabel>
+            <Separator />
             <DropdownMenuItem>Logout</DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>

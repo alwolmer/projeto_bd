@@ -27,11 +27,13 @@ export const useAxios = () => {
 
     const response = await axios
       .post(`${baseURL}/auth/refresh`, {
-        refresh: refreshToken,
+        refreshToken: refreshToken,
       })
       .then((res) => res.data)
       .catch(() => {
         toast.error("Error refreshing token");
+        setRefreshToken(null);
+        setToken(null);
         throw redirect({
           to: "/login",
         });

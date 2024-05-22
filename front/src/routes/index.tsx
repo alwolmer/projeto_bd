@@ -18,7 +18,7 @@ export const Route = createFileRoute("/")({
       });
     }
     throw redirect({
-      to: "/auth/dashboard",
+      to: "/dashboard/home",
     });
   },
 });

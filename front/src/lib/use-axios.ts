@@ -5,8 +5,9 @@ import dayjs from "dayjs";
 import { useAuthStore } from "@/store/auth-store";
 import { redirect } from "@tanstack/react-router";
 import { toast } from "sonner";
+import { LoginResponse } from "@/types/auth";
 
-const baseURL = "http://localhost:8080/";
+const baseURL = "http://localhost:8080";
 
 export const useAxios = () => {
   const { token, refreshToken, setToken, setRefreshToken } = useAuthStore();
@@ -25,7 +26,7 @@ export const useAxios = () => {
 
     if (!isExpired) return req;
 
-    const response = await axios
+    const response: LoginResponse = await axios
       .post(`${baseURL}/auth/refresh`, {
         refreshToken: refreshToken,
       })

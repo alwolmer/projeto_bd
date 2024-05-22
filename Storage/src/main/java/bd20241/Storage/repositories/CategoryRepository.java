@@ -33,6 +33,11 @@ public class CategoryRepository {
         jdbcTemplate.update(sql, id);
     }
 
+    public void updateName(String id, String name) {
+        String sql = "UPDATE category SET cat_name = ? WHERE id = ?";
+        jdbcTemplate.update(sql, name, id);
+    }
+
     private static class CategoryRowMapper implements RowMapper<Category> {
         @Override
         public Category mapRow(ResultSet rs, int rowNum) throws SQLException {

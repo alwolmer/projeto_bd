@@ -5,7 +5,7 @@ import { AxiosInstance } from "axios";
 
 export function userFetch(api: AxiosInstance) {
   return queryOptions({
-    queryKey: ["currentUser", api],
+    queryKey: ["currentUser"],
     queryFn: () => {
       const response: Promise<Employee> = api
         .get("/auth/me")
@@ -20,17 +20,12 @@ export function userFetch(api: AxiosInstance) {
 }
 
 export function categoriesFetch(api: AxiosInstance) {
-  return queryOptions({
-    queryKey: ["categories", api],
-    queryFn: () => {
-      const response: Promise<Category[]> = api
-        .get("/category")
-        .then((response) => response.data)
-        .catch((error) => {
-          throw new Error(error.message);
-        });
+  const response: Promise<Category[]> = api
+    .get("/category")
+    .then((response) => response.data)
+    .catch((error) => {
+      throw new Error(error.message);
+    });
 
-      return response;
-    },
-  });
+  return response;
 }

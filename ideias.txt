@@ -1,0 +1,27 @@
+ideias para consulta:
+- verificar o estoque atual pelas tabelas de transação (cadastro, descarte e pedido)
+	- agregar por categoria, produto e fornecedor
+	- visualizar histórico do estoque (por data arbitrária)
+	- visualizar as agregações anteriores ao longo do tempo
+
+
+- consultar perdas por responsável pelo report, produto, categoria, fornecedor
+	- visualizar agregações ao longo do tempo
+
+- pedidos:
+	- agregar por cliente e tipo de cliente
+	- agregar por categoria e categoria (cruzado com o anterior)
+	- agregar por destino (estado e municipio), idealmente com gráficos
+	- se tem 
+
+- verificar todas as ações registradas por um dado funcionário
+	- abarcar também todos os seus subordinados
+	- bonus: abarcar subordinados "netos" (subordinados de subordinados)
+
+
+- trigger:
+	- automaticamente dar baixa em produto que passou da validade
+	- automaticamente separar pedidos em pacotes
+
+
+- ideias avulsas: 

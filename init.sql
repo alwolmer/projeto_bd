@@ -149,3 +149,24 @@ CREATE TABLE IF NOT EXISTS refresh_token (
         ON DELETE CASCADE
         ON UPDATE CASCADE
 );
+
+DELIMITER //
+
+CREATE TRIGGER before_package_insert
+BEFORE INSERT ON package
+FOR EACH ROW
+BEGIN
+    DECLARE item_count INT;
+    SELECT COUNT(*) INTO item_count
+    FROM packaged_item pi
+    JOIN item i ON pi.item_id = i.id
+    JOIN product p ON p.id = i.product_id
+    WHERE pi.package_id = NEW.id AND p.fragile = TRUE;
+
+    IF item_count > 0 AND NEW.fragile = FALSE THEN
+        SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'A package containing fragile items must be marked as fragile.';
+    END IF;
+END //
+
+DELIMITER ;

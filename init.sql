@@ -23,12 +23,6 @@ CREATE TABLE IF NOT EXISTS classification (
 CREATE TABLE IF NOT EXISTS product_supplier (
     cnpj CHAR(18) NOT NULL,
     name VARCHAR(255) NOT NULL,
-    state CHAR(2) NOT NULL,
-    city VARCHAR(100) NOT NULL,
-    zip CHAR(9) NOT NULL,
-    street VARCHAR(255) NOT NULL,
-    num VARCHAR(50) NOT NULL,
-    comp VARCHAR(100) NOT NULL,
     phone CHAR(15) NOT NULL UNIQUE,
     email VARCHAR(255) NOT NULL UNIQUE,
     PRIMARY KEY(cnpj)
@@ -38,20 +32,18 @@ CREATE TABLE IF NOT EXISTS item (
     id CHAR(23) NOT NULL,
     product_id CHAR(23) NOT NULL,
     supplier_cnpj CHAR(18) NOT NULL,
+    employee_cpf CHAR(14) NOT NULL,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     PRIMARY KEY (id),
     FOREIGN KEY (product_id) REFERENCES product(id),
-    FOREIGN KEY (supplier_cnpj) REFERENCES product_supplier(cnpj)
+    FOREIGN KEY (supplier_cnpj) REFERENCES product_supplier(cnpj),
+    FOREIGN KEY (employee_cpf) REFERENCES employee(cpf)
 );
 
 CREATE TABLE IF NOT EXISTS employee (
     cpf CHAR(14) NOT NULL,
     name VARCHAR(255) NOT NULL,
-    state CHAR(2) NOT NULL,
-    city VARCHAR(100) NOT NULL,
-    zip CHAR(9) NOT NULL,
-    street VARCHAR(255) NOT NULL,
-    num VARCHAR(50) NOT NULL,
-    comp VARCHAR(100) NOT NULL,
     phone CHAR(15) NOT NULL UNIQUE,
     email VARCHAR(255) NOT NULL UNIQUE,
     passwordHash VARCHAR(255) NOT NULL,
@@ -61,24 +53,18 @@ CREATE TABLE IF NOT EXISTS employee (
     FOREIGN KEY(manager_cpf) REFERENCES employee(cpf)
 );
 
-CREATE TABLE IF NOT EXISTS item_record (
-    item_id CHAR(23) NOT NULL,
-    employee_cpf CHAR(14) NOT NULL,
-    record_date DATETIME,
-    FOREIGN KEY (item_id) REFERENCES item(id),
-    FOREIGN KEY (employee_cpf) REFERENCES employee(cpf)
-);
-
 CREATE TABLE IF NOT EXISTS discard (
     employee_cpf CHAR(14) NOT NULL,
     item_id CHAR(23) NOT NULL,
     discard_reason VARCHAR(255) NOT NULL,
-    discard_date DATETIME,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     FOREIGN KEY (employee_cpf) REFERENCES employee(cpf),
-    FOREIGN KEY (item_id) REFERENCES item(id)
+    FOREIGN KEY (item_id) REFERENCES item(id),
+    CONSTRAINT discardOptions CHECK (discard_reason='Extravio' OR discard_reason='Acondicionamento' OR discard_reason='Fabricação/transporte')
 );
 
-CREATE TABLE IF NOT EXISTS transporter (
+CREATE TABLE IF NOT EXISTS carrier (
     cnpj CHAR(18) NOT NULL,
     phone CHAR(15) NOT NULL UNIQUE,
     email VARCHAR(255) NOT NULL UNIQUE,
@@ -89,7 +75,7 @@ CREATE TABLE IF NOT EXISTS transporter (
 
 CREATE TABLE IF NOT EXISTS client (
     id CHAR(23) NOT NULL, 
-    client_name VARCHAR(255) NOT NULL,
+    name VARCHAR(255) NOT NULL,
     phone CHAR(15) NOT NULL UNIQUE,
     email VARCHAR(255) NOT NULL UNIQUE,
     cpf CHAR(14) UNIQUE,
@@ -104,19 +90,20 @@ CREATE TABLE IF NOT EXISTS delivery_address (
     city VARCHAR(100) NOT NULL,
     zip CHAR(9) NOT NULL,
     street VARCHAR(255) NOT NULL,
-    num VARCHAR(50) NOT NULL,
-    comp VARCHAR(100) NOT NULL,
+    number VARCHAR(50) NOT NULL,
+    details VARCHAR(100) NOT NULL,
     client_id CHAR(23) NOT NULL,
     PRIMARY KEY(id),
     FOREIGN KEY(client_id) REFERENCES client(id)
 );
 
-CREATE TABLE IF NOT EXISTS orders (
+CREATE TABLE IF NOT EXISTS order (
     id CHAR(23) NOT NULL,
     client_id CHAR(23) NOT NULL,
     employee_cpf CHAR(14) NOT NULL,
     delivery_address_id CHAR(23) NOT NULL,
-    order_date DATETIME NOT NULL,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     PRIMARY KEY(id),
     FOREIGN KEY(client_id) REFERENCES client(id),
     FOREIGN KEY(employee_cpf) REFERENCES employee(cpf),
@@ -128,10 +115,11 @@ CREATE TABLE IF NOT EXISTS package (
     tracking_code VARCHAR(255) NOT NULL,
     delivery_notes VARCHAR(255),
     order_id CHAR(23) NOT NULL,
-    transporter_cnpj CHAR(18) NOT NULL,
+    carrier_cnpj CHAR(18) NOT NULL,
+    fragile BOOLEAN,
     PRIMARY KEY(id),
-    FOREIGN KEY(order_id) REFERENCES orders(id),
-    FOREIGN KEY(transporter_cnpj) REFERENCES transporter(cnpj)
+    FOREIGN KEY(order_id) REFERENCES order(id),
+    FOREIGN KEY(carrier_cnpj) REFERENCES carrier(cnpj)
 );
 
 CREATE TABLE IF NOT EXISTS packaged_item (
@@ -147,7 +135,7 @@ CREATE TABLE IF NOT EXISTS ordered_item (
     order_id CHAR(23) NOT NULL,
     PRIMARY KEY(item_id, order_id),
     FOREIGN KEY(item_id) REFERENCES item(id),
-    FOREIGN KEY(order_id) REFERENCES orders(id)
+    FOREIGN KEY(order_id) REFERENCES order(id)
 );
 
 

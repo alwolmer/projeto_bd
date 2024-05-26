@@ -25,3 +25,4 @@ ideias para consulta:
 
 
 - ideias avulsas: 
+	- tempo médio que um item, em geral ou de dado produto/fornecedor/categoria fica no estoque

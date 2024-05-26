@@ -4,6 +4,7 @@ import java.util.Optional;
 
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Repository;
 
 import bd20241.Storage.models.RefreshToken;
@@ -37,7 +38,7 @@ public class RefreshTokenRepository {
 
     private static class RefreshTokenMapper implements RowMapper<RefreshToken> {
         @Override
-        public RefreshToken mapRow(java.sql.ResultSet rs, int rowNum) throws java.sql.SQLException {
+        public RefreshToken mapRow(@NonNull java.sql.ResultSet rs, int rowNum) throws java.sql.SQLException {
             RefreshToken refreshToken = new RefreshToken();
             refreshToken.setId(rs.getLong("id"));
             refreshToken.setEmployeeCpf(rs.getString("employee_cpf"));

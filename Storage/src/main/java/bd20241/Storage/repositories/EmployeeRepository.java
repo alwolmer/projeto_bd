@@ -6,6 +6,7 @@ import java.util.Optional;
 
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Repository;
 
 import bd20241.Storage.models.Employee;
@@ -26,14 +27,14 @@ public class EmployeeRepository {
     }
 
     public Employee save(Employee employee) {
-        String sql = "INSERT INTO employee (cpf, name, email, phone, state, city, zip, street, num, comp, manager_cpf, passwordHash) VALUES (?, ? ,?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-        jdbcTemplate.update(sql, employee.getCpf(), employee.getName(), employee.getEmail(), employee.getPhone(), employee.getState(), employee.getCity(), employee.getZip(), employee.getStreet(), employee.getNumber(), employee.getComplement(), employee.getManagerCpf(), employee.getPasswordHash());
+        String sql = "INSERT INTO employee (cpf, name, email, phone, state, city, zip, street, num, comp, is_manager, manager_cpf, passwordHash) VALUES (?, ? ,?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        jdbcTemplate.update(sql, employee.getCpf(), employee.getName(), employee.getEmail(), employee.getPhone(), employee.getState(), employee.getCity(), employee.getZip(), employee.getStreet(), employee.getNumber(), employee.getComplement(), employee.getIsManager() ,employee.getManagerCpf(), employee.getPasswordHash());
         return employee;
     }
     
     private static class EmployeeRowMapper implements RowMapper<Employee> {
         @Override
-        public Employee mapRow(ResultSet rs, int rowNum) throws SQLException {
+        public Employee mapRow(@NonNull ResultSet rs, int rowNum) throws SQLException {
             Employee employee = new Employee();
             employee.setCpf(rs.getString("cpf"));
             employee.setName(rs.getString("name"));
@@ -45,6 +46,7 @@ public class EmployeeRepository {
             employee.setStreet(rs.getString("street"));
             employee.setNumber(rs.getString("num"));
             employee.setComplement(rs.getString("comp"));
+            employee.setIsManager(rs.getBoolean("is_manager"));
             employee.setManagerCpf(rs.getString("manager_cpf"));
             employee.setPasswordHash(rs.getString("passwordHash"));
             return employee;

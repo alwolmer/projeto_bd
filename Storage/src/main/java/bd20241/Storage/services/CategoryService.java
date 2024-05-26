@@ -18,12 +18,24 @@ public class CategoryService {
         this.categoryRepository = categoryRepository;
     }
 
+    public boolean categoryExistsByName(String name) {
+        return categoryRepository.findByName(name) != null;
+    }
+
+    public Category getCategoryByName(String name) {
+        return categoryRepository.findByName(name);
+    }
+
     public Category createCategory(CreateCategoryRequest request) {
         Category category = new Category();
         category.setId(NanoId.randomNanoIdForStorage());
         category.setName(request.getName());
         categoryRepository.save(category);
         return category;
+    }
+
+    public Category getCategoryById(String id) {
+        return categoryRepository.findById(id);
     }
 
     public List<Category> getAllCategories() {

@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Repository;
 
 import bd20241.Storage.models.Category;
@@ -38,9 +39,19 @@ public class CategoryRepository {
         jdbcTemplate.update(sql, name, id);
     }
 
+    public Category findByName(String name) {
+        String sql = "SELECT * FROM category WHERE cat_name = ?";
+        return jdbcTemplate.queryForObject(sql, new CategoryRowMapper(), name);
+    }
+
+    public Category findById(String id) {
+        String sql = "SELECT * FROM category WHERE id = ?";
+        return jdbcTemplate.queryForObject(sql, new CategoryRowMapper(), id);
+    }
+
     private static class CategoryRowMapper implements RowMapper<Category> {
         @Override
-        public Category mapRow(ResultSet rs, int rowNum) throws SQLException {
+        public Category mapRow(@NonNull ResultSet rs, int rowNum) throws SQLException {
             Category category = new Category();
             category.setId(rs.getString("id"));
             category.setName(rs.getString("cat_name"));

@@ -26,8 +26,18 @@ public class Employee implements UserDetails {
     private String street;
     private String number;
     private String complement;
+    private boolean isManager;
     private String managerCpf;
     private String passwordHash;
+
+
+    public boolean getIsManager() {
+        return isManager;
+    }
+
+    public void setIsManager(boolean isManager) {
+        this.isManager = isManager;
+    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

@@ -1,6 +1,6 @@
 package bd20241.Storage.payloads.requests;
 
-import java.util.Date;
+import java.util.List;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -10,5 +10,7 @@ import lombok.Setter;
 @Setter
 public class CreateProductRequest {
     private String name;
-    private Date expirationDate;
+    private float weight;
+    private float volume;
+    private List<String> categories;
 }

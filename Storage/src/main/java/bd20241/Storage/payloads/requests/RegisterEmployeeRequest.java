@@ -17,4 +17,13 @@ public class RegisterEmployeeRequest {
     private String number;
     private String complement;
     private String password;
+    private boolean isManager;
+
+    public boolean getIsManager() {
+        return isManager;
+    }
+
+    public void setIsManager(boolean isManager) {
+        this.isManager = isManager;
+    }
 }

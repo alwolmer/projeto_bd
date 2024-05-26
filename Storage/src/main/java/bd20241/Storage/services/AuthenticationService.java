@@ -36,6 +36,7 @@ public class AuthenticationService {
         employee.setStreet(input.getStreet());
         employee.setNumber(input.getNumber());
         employee.setComplement(input.getComplement());
+        employee.setIsManager(input.getIsManager());
         employee.setManagerCpf(null);
         employee.setPasswordHash(passwordEncoder.encode(input.getPassword()));
 

@@ -6,8 +6,6 @@ export interface Category {
 export interface Product {
   id?: string;
   name: string;
-  weight: number;
-  volume: number;
   categories: string[];
 }
 
@@ -28,7 +26,7 @@ export interface Item {
 
 export interface Discard {
   itemId: string;
-  employeeCpf: string;
+  employeeCpf?: string;
   discardReason: string;
   createdAt?: Date;
   updatedAt?: Date;

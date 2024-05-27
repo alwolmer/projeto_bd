@@ -10,7 +10,5 @@ import lombok.Setter;
 @Setter
 public class CreateProductRequest {
     private String name;
-    private float weight;
-    private float volume;
     private List<String> categories;
 }

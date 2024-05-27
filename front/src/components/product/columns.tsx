@@ -46,34 +46,6 @@ export const columns: ColumnDef<Product>[] = [
     accessorKey: "name",
   },
   {
-    header: ({ column }) => {
-      return (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
-          Weight
-          <ArrowUpDown className="ml-2 h-4 w-4" />
-        </Button>
-      );
-    },
-    accessorKey: "weight",
-  },
-  {
-    header: ({ column }) => {
-      return (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
-          Volume
-          <ArrowUpDown className="ml-2 h-4 w-4" />
-        </Button>
-      );
-    },
-    accessorKey: "volume",
-  },
-  {
     header: "Categories",
     accessorKey: "categories",
     cell: ({ row }) => {
@@ -115,8 +87,6 @@ export const columns: ColumnDef<Product>[] = [
             <EditProductModal
               id={product.id}
               name={product.name}
-              weight={product.weight}
-              volume={product.volume}
               categories={product.categories}
             />
           </DropdownMenuContent>

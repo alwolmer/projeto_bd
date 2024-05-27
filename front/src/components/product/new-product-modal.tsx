@@ -41,8 +41,6 @@ export const NewProductModal = () => {
       return api
         .post("/product", {
           name: product.name,
-          weight: product.weight,
-          volume: product.volume,
           categories: product.categories,
         })
         .then((res) => res.data);
@@ -62,18 +60,12 @@ export const NewProductModal = () => {
   const form = useForm({
     defaultValues: {
       name: "",
-      weight: "",
-      volume: "",
       categories: [],
     },
     onSubmit: ({ value }) => {
-      const { name, weight, volume } = value;
-      const numberWeight = parseFloat(weight);
-      const numberVolume = parseFloat(volume);
+      const { name } = value;
       mutation.mutate({
         name,
-        weight: numberWeight,
-        volume: numberVolume,
         categories: categoryArray,
       });
     },
@@ -126,50 +118,6 @@ export const NewProductModal = () => {
                       onChange={(e) => field.handleChange(e.target.value)}
                       type="text"
                       placeholder="Product name"
-                      className="col-span-3"
-                    />
-                  </div>
-                );
-              }}
-            />
-            <form.Field
-              name="weight"
-              children={(field) => {
-                return (
-                  <div className="grid grid-cols-4 items-center gap-4">
-                    <Label htmlFor={field.name} className="text-right">
-                      Weight (kg)
-                    </Label>
-                    <Input
-                      id={field.name}
-                      name={field.name}
-                      value={field.state.value}
-                      onBlur={field.handleBlur}
-                      onChange={(e) => field.handleChange(e.target.value)}
-                      type="text"
-                      placeholder="Product weight"
-                      className="col-span-3"
-                    />
-                  </div>
-                );
-              }}
-            />
-            <form.Field
-              name="volume"
-              children={(field) => {
-                return (
-                  <div className="grid grid-cols-4 items-center gap-4">
-                    <Label htmlFor={field.name} className="text-right">
-                      Volume (L)
-                    </Label>
-                    <Input
-                      id={field.name}
-                      name={field.name}
-                      value={field.state.value}
-                      onBlur={field.handleBlur}
-                      onChange={(e) => field.handleChange(e.target.value)}
-                      type="text"
-                      placeholder="Product weight"
                       className="col-span-3"
                     />
                   </div>

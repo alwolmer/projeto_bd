@@ -21,8 +21,8 @@ public class ProductRepository {
     }
 
     public void save(Product product) {
-        String sql = "INSERT INTO product (id, prod_name, weight, volume) VALUES (?, ?, ?, ?)";
-        jdbcTemplate.update(sql, product.getId(), product.getName(), product.getWeight(), product.getVolume());
+        String sql = "INSERT INTO product (id, prod_name ) VALUES (?, ?)";
+        jdbcTemplate.update(sql, product.getId(), product.getName());
     }
 
     public List<Product> findAll() {
@@ -36,8 +36,8 @@ public class ProductRepository {
     }
 
     public void update(Product product) {
-        String sql = "UPDATE product SET prod_name = ?, weight = ?, volume = ? WHERE id = ?";
-        jdbcTemplate.update(sql, product.getName(), product.getWeight(), product.getVolume(), product.getId());
+        String sql = "UPDATE product SET prod_name = ? WHERE id = ?";
+        jdbcTemplate.update(sql, product.getName(), product.getId());
     }
 
     public void deleteById(String id) {
@@ -51,8 +51,7 @@ public class ProductRepository {
             Product product = new Product();
             product.setId(rs.getString("id"));
             product.setName(rs.getString("prod_name"));
-            product.setWeight(rs.getFloat("weight"));
-            product.setVolume(rs.getFloat("volume"));
+
             return product;
         }
     }

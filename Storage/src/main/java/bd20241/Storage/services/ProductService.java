@@ -29,8 +29,6 @@ public class ProductService {
         Product product = new Product();
         product.setId(NanoId.randomNanoIdForStorage());
         product.setName(createProductRequest.getName());
-        product.setWeight(createProductRequest.getWeight());
-        product.setVolume(createProductRequest.getVolume());
         productRepository.save(product);
         List<String> categories = new ArrayList<>();
         for (String categoryName : createProductRequest.getCategories()) { 
@@ -41,8 +39,6 @@ public class ProductService {
         ProductResponse productResponse = new ProductResponse();
         productResponse.setId(product.getId());
         productResponse.setName(product.getName());
-        productResponse.setWeight(product.getWeight());
-        productResponse.setVolume(product.getVolume());
         productResponse.setCategories(categories);
         return productResponse;
     }
@@ -54,8 +50,6 @@ public class ProductService {
             ProductResponse productResponse = new ProductResponse();
             productResponse.setId(product.getId());
             productResponse.setName(product.getName());
-            productResponse.setWeight(product.getWeight());
-            productResponse.setVolume(product.getVolume());
             List<String> categories = new ArrayList<>();
             for (String categoryId : classificationService.getCategoriesByProductId(product.getId())) {
                 Category category = categoryService.getCategoryById(categoryId);
@@ -70,8 +64,6 @@ public class ProductService {
     public ProductResponse updateProduct(String id, CreateProductRequest createProductRequest) {
         Product product = productRepository.findById(id);
         product.setName(createProductRequest.getName());
-        product.setWeight(createProductRequest.getWeight());
-        product.setVolume(createProductRequest.getVolume());
         productRepository.update(product);
         List<String> existingCategoriesIds = classificationService.getCategoriesByProductId(id);
         List<String> categories = new ArrayList<>();
@@ -91,8 +83,6 @@ public class ProductService {
         ProductResponse productResponse = new ProductResponse();
         productResponse.setId(product.getId());
         productResponse.setName(product.getName());
-        productResponse.setWeight(product.getWeight());
-        productResponse.setVolume(product.getVolume());
         productResponse.setCategories(categories);
         return productResponse;
     }

@@ -1,7 +1,6 @@
 import { useState } from "react";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useForm } from "@tanstack/react-form";
-import { PlusCircle } from "lucide-react";
 
 import { useAxios } from "@/lib/use-axios";
 import {
@@ -15,7 +14,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
-import { Discard, Item, Product } from "@/types/storage";
+import { Discard } from "@/types/storage";
 import {
   Select,
   SelectContent,
@@ -23,9 +22,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { productsFetch, suppliersFetch } from "@/api/queries";
 
-export const DiscardItemModal = () => {
+export const DiscardItemModal = ({ itemId }: { itemId: string }) => {
   const [open, setOpen] = useState(false);
 
   const api = useAxios();
@@ -35,15 +33,15 @@ export const DiscardItemModal = () => {
   const mutation = useMutation({
     mutationFn: (discard: Discard): Promise<Discard> => {
       return api
-        .post("/item", {
-          productId: item.productId,
-          supplierCnpj: item.supplierCnpj,
+        .post("/discard", {
+          productId: discard.itemId,
+          supplierCnpj: discard.discardReason,
         })
         .then((res) => res.data);
     },
-    onSuccess: (data: Item) => {
-      toast.success("Item created");
-      queryClient.setQueryData(["items"], (old: Item[] | undefined) => {
+    onSuccess: (data: Discard) => {
+      toast.success("Item discarded successfully!");
+      queryClient.setQueryData(["discards"], (old: Discard[] | undefined) => {
         return old ? [...old, data] : [data];
       });
       setOpen(false);
@@ -55,11 +53,10 @@ export const DiscardItemModal = () => {
 
   const form = useForm({
     defaultValues: {
-      itemId: "",
       discardReason: "",
     },
     onSubmit: ({ value }) => {
-      const { itemId, discardReason } = value;
+      const { discardReason } = value;
       mutation.mutate({
         itemId,
         discardReason,
@@ -67,36 +64,15 @@ export const DiscardItemModal = () => {
     },
   });
 
-  const {
-    isPending: isProductsPending,
-    data: productData,
-    error: productError,
-  } = useQuery({
-    queryKey: ["products"],
-    queryFn: () => productsFetch(api),
-  });
-
-  const {
-    isPending: isSuppliersPending,
-    data: supplierData,
-    error: supplierError,
-  } = useQuery({
-    queryKey: ["suppliers"],
-    queryFn: () => suppliersFetch(api),
-  });
-
-  if (isProductsPending || isSuppliersPending) return <div>Loading...</div>;
-
-  if (productError || supplierError) {
-    return <div>Error</div>;
-  }
-
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button variant="outline" className="mr-4">
-          <PlusCircle className="h-4 w-4" />
-          <span className="ml-2">New Item</span>
+        <Button
+          variant="ghost"
+          size="sm"
+          className="w-full text-left justify-start text-sm"
+        >
+          Discard
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[500px]">
@@ -112,12 +88,12 @@ export const DiscardItemModal = () => {
         >
           <div className="grid gap-4 py-4">
             <form.Field
-              name="productId"
+              name="discardReason"
               children={(field) => {
                 return (
                   <div className="grid grid-cols-4 items-center gap-4">
                     <Label htmlFor={field.name} className="text-right">
-                      Product
+                      Discard Reason
                     </Label>
                     <Select
                       onValueChange={field.handleChange}
@@ -127,41 +103,13 @@ export const DiscardItemModal = () => {
                         <SelectValue placeholder="Select a product" />
                       </SelectTrigger>
                       <SelectContent>
-                        {productData?.map((product: Product) => (
-                          <SelectItem key={product.id!} value={product.id!}>
-                            {product.name}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                  </div>
-                );
-              }}
-            />
-            <form.Field
-              name="supplierCnpj"
-              children={(field) => {
-                return (
-                  <div className="grid grid-cols-4 items-center gap-4">
-                    <Label htmlFor={field.name} className="text-right">
-                      Supplier
-                    </Label>
-                    <Select
-                      onValueChange={field.handleChange}
-                      defaultValue={field.state.value}
-                    >
-                      <SelectTrigger className="col-span-3">
-                        <SelectValue placeholder="Select a product" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {supplierData?.map((supplier) => (
-                          <SelectItem
-                            key={supplier.cnpj}
-                            value={supplier.cnpj!}
-                          >
-                            {supplier.name}
-                          </SelectItem>
-                        ))}
+                        <SelectItem value="loss">Loss</SelectItem>
+                        <SelectItem value="Bad Conditioning">
+                          Bad Conditioning
+                        </SelectItem>
+                        <SelectItem value="Fabrication/Transport">
+                          Fabrication/Transport
+                        </SelectItem>
                       </SelectContent>
                     </Select>
                   </div>
@@ -170,7 +118,7 @@ export const DiscardItemModal = () => {
             />
           </div>
           <DialogFooter>
-            <Button type="submit">Create</Button>
+            <Button type="submit">Discard</Button>
           </DialogFooter>
         </form>
       </DialogContent>

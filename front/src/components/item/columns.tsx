@@ -13,6 +13,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Checkbox } from "@/components/ui/checkbox";
 import { toast } from "sonner";
+import { DiscardItemModal } from "./discard-item-modal";
 // import { EditSupplierModal } from "./edit-supplier-modal";
 
 export const columns: ColumnDef<Item>[] = [
@@ -84,12 +85,7 @@ export const columns: ColumnDef<Item>[] = [
               Copy item id
             </DropdownMenuItem>
             <DropdownMenuSeparator />
-            {/* <EditSupplierModal
-              cnpj={supplier.cnpj}
-              name={supplier.name}
-              phone={supplier.phone}
-              email={supplier.email}
-            /> */}
+            <DiscardItemModal itemId={item.id!} />
           </DropdownMenuContent>
         </DropdownMenu>
       );

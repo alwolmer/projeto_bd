@@ -57,6 +57,7 @@ CREATE TABLE IF NOT EXISTS discard (
     discard_reason VARCHAR(255) NOT NULL,
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
     updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    PRIMARY KEY (item_id),
     FOREIGN KEY (employee_cpf) REFERENCES employee(cpf),
     FOREIGN KEY (item_id) REFERENCES item(id),
     CONSTRAINT discardOptions CHECK (discard_reason='Loss' OR discard_reason='Bad Conditioning' OR discard_reason='Fabrication/Transport')

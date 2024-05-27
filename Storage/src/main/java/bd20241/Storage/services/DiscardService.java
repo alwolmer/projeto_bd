@@ -23,5 +23,9 @@ public class DiscardService {
     public List<Discard> getDiscards() {
         return discardRepository.findAll();
     }
+
+    public void deleteDiscard(String id) {
+        discardRepository.deleteById(id);
+    }
     
 }

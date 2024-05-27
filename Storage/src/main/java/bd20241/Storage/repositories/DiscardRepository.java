@@ -40,6 +40,16 @@ public class DiscardRepository {
         return jdbcTemplate.query(sql, new DiscardRowMapper());
     }
 
+    public void deleteByEmployeeCpfAndItemId(String employeeCpf, String itemId) {
+        String sql = "DELETE FROM discard WHERE employee_cpf = ? AND item_id = ?";
+        jdbcTemplate.update(sql, employeeCpf, itemId);
+    }
+
+    public void deleteById(String itemId) {
+        String sql = "DELETE FROM discard WHERE item_id = ?";
+        jdbcTemplate.update(sql, itemId);
+    }
+
     private static class DiscardRowMapper implements RowMapper<Discard> {
         @Override
         public Discard mapRow(@NonNull ResultSet rs, int rowNum) throws SQLException {

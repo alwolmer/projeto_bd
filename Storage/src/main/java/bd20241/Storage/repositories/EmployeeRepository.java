@@ -42,6 +42,11 @@ public class EmployeeRepository {
         String sql = "UPDATE employee SET name = ?, email = ?, phone = ?, is_manager = ?, manager_cpf = ?, passwordHash = ? WHERE cpf = ?";
         jdbcTemplate.update(sql, employee.getName(), employee.getEmail(), employee.getPhone(), employee.getIsManager(), employee.getManagerCpf(), employee.getPasswordHash(), employee.getCpf());
     }
+
+    public void deleteByCpf(String cpf) {
+        String sql = "DELETE FROM employee WHERE cpf = ?";
+        jdbcTemplate.update(sql, cpf);
+    }
     
     private static class EmployeeRowMapper implements RowMapper<Employee> {
         @Override

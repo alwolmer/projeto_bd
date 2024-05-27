@@ -87,4 +87,8 @@ public class ProductService {
         return productResponse;
     }
 
+    public void deleteProduct(String id) {
+        productRepository.deleteById(id);
+    }
+
 }

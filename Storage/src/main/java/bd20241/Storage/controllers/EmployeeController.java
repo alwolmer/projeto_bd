@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -65,6 +66,29 @@ public class EmployeeController {
         }
 
         return ResponseEntity.ok(employeeService.updateEmployee(cleanedCpf, editEmployeeRequest));
+    }
+
+    @DeleteMapping("/{cpf}")
+    public ResponseEntity<Void> deleteEmployee(@PathVariable String cpf) {
+        UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String currentCpf = userDetails.getUsername();
+        Employee me = employeeService.findByCpf(currentCpf).orElseThrow();
+        if (!me.getIsManager()) {
+            return ResponseEntity.status(403).build();
+        }
+        String cleanedCpf = cpf.replaceAll("(\\d{3})(\\d{3})(\\d{3})(\\d{2})", "$1.$2.$3-$4");
+
+        Employee employee = employeeService.findByCpf(cleanedCpf).orElseThrow();
+        if (employee.getManagerCpf() != null && !employee.getManagerCpf().equals(currentCpf)) {
+            return ResponseEntity.status(403).build();
+        }
+
+        if (cleanedCpf.equals(currentCpf)) {
+            return ResponseEntity.status(403).build();
+        }
+
+        employeeService.deleteEmployee(cleanedCpf);
+        return ResponseEntity.noContent().build();
     }
     
 }

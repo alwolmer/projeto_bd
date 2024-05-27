@@ -1,7 +1,7 @@
 import { ColumnDef } from "@tanstack/react-table";
 import { ArrowUpDown, MoreHorizontal } from "lucide-react";
 
-import { Item } from "@/types/storage";
+import { Discard } from "@/types/storage";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -13,26 +13,23 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Checkbox } from "@/components/ui/checkbox";
 import { toast } from "sonner";
-import { DiscardItemModal } from "./discard-item-modal";
-import { DeleteItemModal } from "./delete-item-modal";
+import { DeleteDiscardModal } from "./delete-discard-modal";
+// import { DiscardItemModal } from "./discard-item-modal";
+// import { DeleteItemModal } from "./delete-item-modal";
 // import { EditSupplierModal } from "./edit-supplier-modal";
 
-export const columns: ColumnDef<Item>[] = [
+export const columns: ColumnDef<Discard>[] = [
   {
-    header: "ID",
-    accessorKey: "id",
-  },
-  {
-    header: "Product ID",
-    accessorKey: "productId",
-  },
-  {
-    header: "Supplier CNPJ",
-    accessorKey: "supplierCnpj",
+    header: "Item ID",
+    accessorKey: "itemId",
   },
   {
     header: "Employee CPF",
     accessorKey: "employeeCpf",
+  },
+  {
+    header: "Discard Reason",
+    accessorKey: "discardReason",
   },
   {
     header: ({ column }) => {
@@ -65,7 +62,7 @@ export const columns: ColumnDef<Item>[] = [
   {
     id: "actions",
     cell: ({ row }) => {
-      const item = row.original;
+      const discard = row.original;
 
       return (
         <DropdownMenu>
@@ -79,15 +76,16 @@ export const columns: ColumnDef<Item>[] = [
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
             <DropdownMenuItem
               onClick={() => {
-                navigator.clipboard.writeText(item.id!);
-                toast.success("Item id copied");
+                navigator.clipboard.writeText(discard.itemId!);
+                toast.success("Discarded item id copied");
               }}
             >
               Copy item id
             </DropdownMenuItem>
             <DropdownMenuSeparator />
-            <DiscardItemModal itemId={item.id!} />
-            <DeleteItemModal id={item.id!} />
+            {/* <DiscardItemModal itemId={item.id!} />
+            <DeleteItemModal id={item.id!} /> */}
+            <DeleteDiscardModal itemId={discard.itemId!} />
           </DropdownMenuContent>
         </DropdownMenu>
       );

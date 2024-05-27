@@ -39,5 +39,9 @@ public class SupplierService {
         supplierRepository.updateSupplier(newSupplier);
         return newSupplier;
     }
+
+    public void deleteSupplier(String cnpj) {
+        supplierRepository.deleteByCnpj(cnpj);
+    }
     
 }

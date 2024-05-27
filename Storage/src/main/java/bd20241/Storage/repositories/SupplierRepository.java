@@ -40,6 +40,11 @@ public class SupplierRepository {
         jdbcTemplate.update(sql, supplier.getName(), supplier.getEmail(), supplier.getPhone(), supplier.getCnpj());
     }
 
+    public void deleteByCnpj(String cnpj) {
+        String sql = "DELETE FROM product_supplier WHERE cnpj = ?";
+        jdbcTemplate.update(sql, cnpj);
+    }
+
 
     private static class SupplierRowMapper implements RowMapper<Supplier> {
         @Override

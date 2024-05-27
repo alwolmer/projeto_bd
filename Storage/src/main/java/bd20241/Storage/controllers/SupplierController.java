@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -49,5 +50,17 @@ public class SupplierController {
         updatedSupplier = supplierService.updateSupplier(supplier, cleanedValue);
 
         return ResponseEntity.ok(updatedSupplier);
+    }
+
+    @DeleteMapping("/{cnpj}")
+    public ResponseEntity<Void> deleteSupplier(@PathVariable String cnpj) {
+        String cleanedValue = cnpj.replaceAll("\\D", "").replaceAll("(\\d{2})(\\d{3})(\\d{3})(\\d{4})(\\d{2})", "$1.$2.$3/$4-$5");
+
+        Supplier supplier = supplierService.getSupplierByCnpj(cleanedValue);
+        if (supplier == null) {
+            return ResponseEntity.notFound().build();
+        }
+        supplierService.deleteSupplier(cleanedValue);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 }

@@ -5,7 +5,9 @@ import java.util.List;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -28,7 +30,6 @@ public class DiscardController {
     public ResponseEntity<Discard> discard(@RequestBody DiscardItemRequest discardItemRequest) {
         UserDetails user =(UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         String cpf = user.getUsername();
-
         Discard discarded = discardService.discardItem(discardItemRequest, cpf);
         return ResponseEntity.ok(discarded);
     }
@@ -36,6 +37,12 @@ public class DiscardController {
     @GetMapping
     public ResponseEntity<List<Discard>> getDiscards() {
         return ResponseEntity.ok(discardService.getDiscards());
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteDiscard(@PathVariable String id) {
+        discardService.deleteDiscard(id);
+        return ResponseEntity.noContent().build();
     }
     
 }

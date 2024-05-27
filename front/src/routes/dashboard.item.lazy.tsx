@@ -27,11 +27,6 @@ function ItemTable() {
     <>
       <h1 className="text-2xl font-semibold">Items</h1>
       <div className="container mx-auto py-10">
-        {/* <EmployeeDataTable
-          columns={columns}
-          data={data}
-          creationDisabled={me?.isManager ? false : true}
-        /> */}
         <ItemDataTable columns={columns} data={data} />
       </div>
     </>

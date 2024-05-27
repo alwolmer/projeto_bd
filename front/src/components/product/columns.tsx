@@ -15,6 +15,7 @@ import {
 import { Checkbox } from "@/components/ui/checkbox";
 import { toast } from "sonner";
 import { EditProductModal } from "./edit-product.modal";
+import { DeleteProductModal } from "./delete-product-modal";
 
 export const columns: ColumnDef<Product>[] = [
   {
@@ -89,6 +90,7 @@ export const columns: ColumnDef<Product>[] = [
               name={product.name}
               categories={product.categories}
             />
+            <DeleteProductModal id={product.id!} />
           </DropdownMenuContent>
         </DropdownMenu>
       );

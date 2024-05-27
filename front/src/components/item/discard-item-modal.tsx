@@ -34,8 +34,9 @@ export const DiscardItemModal = ({ itemId }: { itemId: string }) => {
     mutationFn: (discard: Discard): Promise<Discard> => {
       return api
         .post("/discard", {
+          itemId: itemId,
           productId: discard.itemId,
-          supplierCnpj: discard.discardReason,
+          discardReason: discard.discardReason,
         })
         .then((res) => res.data);
     },

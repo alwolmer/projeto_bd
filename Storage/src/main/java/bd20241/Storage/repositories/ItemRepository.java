@@ -32,6 +32,11 @@ public class ItemRepository {
         return jdbcTemplate.query(sql, new ItemRowMapper());
     }
 
+    public void deleteById(String id) {
+        String sql = "DELETE FROM item WHERE id = ?";
+        jdbcTemplate.update(sql, id);
+    }
+
 
     private static class ItemRowMapper implements RowMapper<Item> {
         @Override

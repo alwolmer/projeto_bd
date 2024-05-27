@@ -14,6 +14,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { toast } from "sonner";
 import { Employee } from "@/types/auth";
 import { EditEmployeeModal } from "./edit-employee-modal";
+import { DeleteEmployeeModal } from "./delete-employee-modal";
 // import { EditSupplierModal } from "./edit-supplier-modal";
 // import { EditProductModal } from "./edit-product.modal";
 
@@ -138,6 +139,7 @@ export const columns: ColumnDef<Employee>[] = [
               email={employee.email}
               isManager={employee.isManager}
             />
+            <DeleteEmployeeModal cpf={employee.cpf!} />
             {/* <EditSupplierModal
               cnpj={supplier.cnpj}
               name={supplier.name}

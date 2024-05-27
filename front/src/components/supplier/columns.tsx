@@ -14,6 +14,7 @@ import {
 import { Checkbox } from "@/components/ui/checkbox";
 import { toast } from "sonner";
 import { EditSupplierModal } from "./edit-supplier-modal";
+import { DeleteSupplierModal } from "./delete-supplier-modal";
 
 export const columns: ColumnDef<Supplier>[] = [
   {
@@ -102,6 +103,7 @@ export const columns: ColumnDef<Supplier>[] = [
               phone={supplier.phone}
               email={supplier.email}
             />
+            <DeleteSupplierModal cnpj={supplier.cnpj!} />
           </DropdownMenuContent>
         </DropdownMenu>
       );

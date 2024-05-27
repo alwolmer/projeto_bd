@@ -24,5 +24,9 @@ public class ItemService {
     public List<Item> getItems() {
         return itemRepository.findAll();
     }
+
+    public void deleteItem(String id) {
+        itemRepository.deleteById(id);
+    }
     
 }

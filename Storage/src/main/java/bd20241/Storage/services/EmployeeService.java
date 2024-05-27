@@ -85,5 +85,9 @@ public class EmployeeService {
         return employeeResponse;
     }
 
+    public void deleteEmployee(String cpf) {
+        employeeRepository.deleteByCpf(cpf);
+    }
+
     
 }

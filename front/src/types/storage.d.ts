@@ -31,3 +31,10 @@ export interface Discard {
   createdAt?: Date;
   updatedAt?: Date;
 }
+
+export interface Carrier {
+  cnpj?: string;
+  name: string;
+  phone: string;
+  email: string;
+}

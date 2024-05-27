@@ -20,7 +20,18 @@ import {
   redirect,
   useNavigate,
 } from "@tanstack/react-router";
-import { Home, Menu, Package, Tag, Truck } from "lucide-react";
+import {
+  Barcode,
+  Home,
+  Menu,
+  Package,
+  Plane,
+  Tag,
+  Trash2,
+  Truck,
+  UserCircle,
+  UsersRound,
+} from "lucide-react";
 import { toast } from "sonner";
 
 export const Route = createFileRoute("/dashboard")({
@@ -92,7 +103,7 @@ function Navbar() {
                 to="/dashboard/product"
                 className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary"
               >
-                <Package className="h-4 w-4" />
+                <Barcode className="h-4 w-4" />
                 Product
               </Link>
               <Link
@@ -101,6 +112,41 @@ function Navbar() {
               >
                 <Truck className="h-4 w-4" />
                 Supplier
+              </Link>
+              <Link
+                to="/dashboard/employee"
+                className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary"
+              >
+                <UsersRound className="h-4 w-4" />
+                Employee
+              </Link>
+              <Link
+                to="/dashboard/item"
+                className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary"
+              >
+                <Package className="h-4 w-4" />
+                Item
+              </Link>
+              <Link
+                to="/dashboard/discard"
+                className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary"
+              >
+                <Trash2 className="h-4 w-4" />
+                Discard
+              </Link>
+              <Link
+                to="/dashboard/carrier"
+                className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary"
+              >
+                <Plane className="h-4 w-4" />
+                Carrier
+              </Link>
+              <Link
+                to="/dashboard/client"
+                className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary"
+              >
+                <UserCircle className="h-4 w-4" />
+                Client
               </Link>
             </nav>
           </div>
@@ -147,7 +193,7 @@ function Navbar() {
                   to="/dashboard/product"
                   className="mx-[-0.65rem] flex items-center gap-4 rounded-xl px-3 py-2 text-muted-foreground hover:text-foreground"
                 >
-                  <Package className="h-4 w-4" />
+                  <Barcode className="h-4 w-4" />
                   Product
                 </Link>
                 <Link
@@ -156,6 +202,41 @@ function Navbar() {
                 >
                   <Truck className="h-4 w-4" />
                   Supplier
+                </Link>
+                <Link
+                  to="/dashboard/employee"
+                  className="mx-[-0.65rem] flex items-center gap-4 rounded-xl px-3 py-2 text-muted-foreground hover:text-foreground"
+                >
+                  <UsersRound className="h-4 w-4" />
+                  Employee
+                </Link>
+                <Link
+                  to="/dashboard/item"
+                  className="mx-[-0.65rem] flex items-center gap-4 rounded-xl px-3 py-2 text-muted-foreground hover:text-foreground"
+                >
+                  <Package className="h-4 w-4" />
+                  Item
+                </Link>
+                <Link
+                  to="/dashboard/discard"
+                  className="mx-[-0.65rem] flex items-center gap-4 rounded-xl px-3 py-2 text-muted-foreground hover:text-foreground"
+                >
+                  <Trash2 className="h-4 w-4" />
+                  Discard
+                </Link>
+                <Link
+                  to="/dashboard/carrier"
+                  className="mx-[-0.65rem] flex items-center gap-4 rounded-xl px-3 py-2 text-muted-foreground hover:text-foreground"
+                >
+                  <Plane className="h-4 w-4" />
+                  Carrier
+                </Link>
+                <Link
+                  to="/dashboard/client"
+                  className="mx-[-0.65rem] flex items-center gap-4 rounded-xl px-3 py-2 text-muted-foreground hover:text-foreground"
+                >
+                  <UserCircle className="h-4 w-4" />
+                  Client
                 </Link>
               </nav>
             </SheetContent>
@@ -184,34 +265,4 @@ function Navbar() {
       </div>
     </div>
   );
-
-  // return (
-  //   <>
-  //     <div className="p-2 flex gap-2 justify-between px-12">
-  //       <Link
-  //         to="/"
-  //         className="[&.active]:font-bold flex flex-row items-center"
-  //       >
-  //         <img src="/logo.svg" alt="logo" className="w-10 h-10" />
-  //         Armazém do Seu Zé
-  //       </Link>{" "}
-  //       <DropdownMenu>
-  //         <DropdownMenuTrigger>
-  //           <Avatar>
-  //             <AvatarFallback>{data?.name[0]}</AvatarFallback>
-  //           </Avatar>
-  //         </DropdownMenuTrigger>
-  //         <DropdownMenuContent>
-  //           <DropdownMenuLabel>{data.name}</DropdownMenuLabel>
-  //           <Separator />
-  //           <DropdownMenuItem onClick={() => signOut()}>
-  //             Logout
-  //           </DropdownMenuItem>
-  //         </DropdownMenuContent>
-  //       </DropdownMenu>
-  //     </div>
-  //     <hr />
-  //     <Outlet />
-  //   </>
-  // );
 }

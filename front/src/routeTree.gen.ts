@@ -21,8 +21,13 @@ import { Route as IndexImport } from './routes/index'
 
 const DashboardSupplierLazyImport = createFileRoute('/dashboard/supplier')()
 const DashboardProductLazyImport = createFileRoute('/dashboard/product')()
+const DashboardItemLazyImport = createFileRoute('/dashboard/item')()
 const DashboardHomeLazyImport = createFileRoute('/dashboard/home')()
+const DashboardEmployeeLazyImport = createFileRoute('/dashboard/employee')()
+const DashboardDiscardLazyImport = createFileRoute('/dashboard/discard')()
+const DashboardClientLazyImport = createFileRoute('/dashboard/client')()
 const DashboardCategoryLazyImport = createFileRoute('/dashboard/category')()
+const DashboardCarrierLazyImport = createFileRoute('/dashboard/carrier')()
 
 // Create/Update Routes
 
@@ -55,6 +60,13 @@ const DashboardProductLazyRoute = DashboardProductLazyImport.update({
   import('./routes/dashboard.product.lazy').then((d) => d.Route),
 )
 
+const DashboardItemLazyRoute = DashboardItemLazyImport.update({
+  path: '/item',
+  getParentRoute: () => DashboardRoute,
+} as any).lazy(() =>
+  import('./routes/dashboard.item.lazy').then((d) => d.Route),
+)
+
 const DashboardHomeLazyRoute = DashboardHomeLazyImport.update({
   path: '/home',
   getParentRoute: () => DashboardRoute,
@@ -62,11 +74,39 @@ const DashboardHomeLazyRoute = DashboardHomeLazyImport.update({
   import('./routes/dashboard.home.lazy').then((d) => d.Route),
 )
 
+const DashboardEmployeeLazyRoute = DashboardEmployeeLazyImport.update({
+  path: '/employee',
+  getParentRoute: () => DashboardRoute,
+} as any).lazy(() =>
+  import('./routes/dashboard.employee.lazy').then((d) => d.Route),
+)
+
+const DashboardDiscardLazyRoute = DashboardDiscardLazyImport.update({
+  path: '/discard',
+  getParentRoute: () => DashboardRoute,
+} as any).lazy(() =>
+  import('./routes/dashboard.discard.lazy').then((d) => d.Route),
+)
+
+const DashboardClientLazyRoute = DashboardClientLazyImport.update({
+  path: '/client',
+  getParentRoute: () => DashboardRoute,
+} as any).lazy(() =>
+  import('./routes/dashboard.client.lazy').then((d) => d.Route),
+)
+
 const DashboardCategoryLazyRoute = DashboardCategoryLazyImport.update({
   path: '/category',
   getParentRoute: () => DashboardRoute,
 } as any).lazy(() =>
   import('./routes/dashboard.category.lazy').then((d) => d.Route),
+)
+
+const DashboardCarrierLazyRoute = DashboardCarrierLazyImport.update({
+  path: '/carrier',
+  getParentRoute: () => DashboardRoute,
+} as any).lazy(() =>
+  import('./routes/dashboard.carrier.lazy').then((d) => d.Route),
 )
 
 // Populate the FileRoutesByPath interface
@@ -85,12 +125,32 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LoginImport
       parentRoute: typeof rootRoute
     }
+    '/dashboard/carrier': {
+      preLoaderRoute: typeof DashboardCarrierLazyImport
+      parentRoute: typeof DashboardImport
+    }
     '/dashboard/category': {
       preLoaderRoute: typeof DashboardCategoryLazyImport
       parentRoute: typeof DashboardImport
     }
+    '/dashboard/client': {
+      preLoaderRoute: typeof DashboardClientLazyImport
+      parentRoute: typeof DashboardImport
+    }
+    '/dashboard/discard': {
+      preLoaderRoute: typeof DashboardDiscardLazyImport
+      parentRoute: typeof DashboardImport
+    }
+    '/dashboard/employee': {
+      preLoaderRoute: typeof DashboardEmployeeLazyImport
+      parentRoute: typeof DashboardImport
+    }
     '/dashboard/home': {
       preLoaderRoute: typeof DashboardHomeLazyImport
+      parentRoute: typeof DashboardImport
+    }
+    '/dashboard/item': {
+      preLoaderRoute: typeof DashboardItemLazyImport
       parentRoute: typeof DashboardImport
     }
     '/dashboard/product': {
@@ -109,8 +169,13 @@ declare module '@tanstack/react-router' {
 export const routeTree = rootRoute.addChildren([
   IndexRoute,
   DashboardRoute.addChildren([
+    DashboardCarrierLazyRoute,
     DashboardCategoryLazyRoute,
+    DashboardClientLazyRoute,
+    DashboardDiscardLazyRoute,
+    DashboardEmployeeLazyRoute,
     DashboardHomeLazyRoute,
+    DashboardItemLazyRoute,
     DashboardProductLazyRoute,
     DashboardSupplierLazyRoute,
   ]),

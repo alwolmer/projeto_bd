@@ -20,7 +20,7 @@ import {
   redirect,
   useNavigate,
 } from "@tanstack/react-router";
-import { Home, Menu, Package, Tag } from "lucide-react";
+import { Home, Menu, Package, Tag, Truck } from "lucide-react";
 import { toast } from "sonner";
 
 export const Route = createFileRoute("/dashboard")({
@@ -95,6 +95,13 @@ function Navbar() {
                 <Package className="h-4 w-4" />
                 Product
               </Link>
+              <Link
+                to="/dashboard/supplier"
+                className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary"
+              >
+                <Truck className="h-4 w-4" />
+                Supplier
+              </Link>
             </nav>
           </div>
           <div className="mt-auto p-4"></div>
@@ -142,6 +149,13 @@ function Navbar() {
                 >
                   <Package className="h-4 w-4" />
                   Product
+                </Link>
+                <Link
+                  to="/dashboard/supplier"
+                  className="mx-[-0.65rem] flex items-center gap-4 rounded-xl px-3 py-2 text-muted-foreground hover:text-foreground"
+                >
+                  <Truck className="h-4 w-4" />
+                  Supplier
                 </Link>
               </nav>
             </SheetContent>

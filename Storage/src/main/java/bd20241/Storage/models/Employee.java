@@ -20,12 +20,6 @@ public class Employee implements UserDetails {
     private String name;
     private String email;
     private String phone;
-    private String state;
-    private String city;
-    private String zip;
-    private String street;
-    private String number;
-    private String complement;
     private boolean isManager;
     private String managerCpf;
     private String passwordHash;

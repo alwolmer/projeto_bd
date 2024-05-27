@@ -19,6 +19,7 @@ import { Route as IndexImport } from './routes/index'
 
 // Create Virtual Routes
 
+const DashboardSupplierLazyImport = createFileRoute('/dashboard/supplier')()
 const DashboardProductLazyImport = createFileRoute('/dashboard/product')()
 const DashboardHomeLazyImport = createFileRoute('/dashboard/home')()
 const DashboardCategoryLazyImport = createFileRoute('/dashboard/category')()
@@ -39,6 +40,13 @@ const IndexRoute = IndexImport.update({
   path: '/',
   getParentRoute: () => rootRoute,
 } as any)
+
+const DashboardSupplierLazyRoute = DashboardSupplierLazyImport.update({
+  path: '/supplier',
+  getParentRoute: () => DashboardRoute,
+} as any).lazy(() =>
+  import('./routes/dashboard.supplier.lazy').then((d) => d.Route),
+)
 
 const DashboardProductLazyRoute = DashboardProductLazyImport.update({
   path: '/product',
@@ -89,6 +97,10 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardProductLazyImport
       parentRoute: typeof DashboardImport
     }
+    '/dashboard/supplier': {
+      preLoaderRoute: typeof DashboardSupplierLazyImport
+      parentRoute: typeof DashboardImport
+    }
   }
 }
 
@@ -100,6 +112,7 @@ export const routeTree = rootRoute.addChildren([
     DashboardCategoryLazyRoute,
     DashboardHomeLazyRoute,
     DashboardProductLazyRoute,
+    DashboardSupplierLazyRoute,
   ]),
   LoginRoute,
 ])

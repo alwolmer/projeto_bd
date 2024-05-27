@@ -15,11 +15,6 @@ export interface Employee {
   name: string;
   email: string;
   phone: string;
-  state: string;
-  city: string;
-  zip: string;
-  street: string;
-  number: string;
-  complement: string;
+  isManager: boolean;
   managerCpf: string | null;
 }

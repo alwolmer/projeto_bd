@@ -1,5 +1,5 @@
 import { Employee } from "@/types/auth";
-import { Category, Product } from "@/types/storage";
+import { Category, Product, Supplier } from "@/types/storage";
 import { queryOptions } from "@tanstack/react-query";
 import { AxiosInstance } from "axios";
 
@@ -33,6 +33,16 @@ export function categoriesFetch(api: AxiosInstance) {
 export function productsFetch(api: AxiosInstance) {
   const response: Promise<Product[]> = api
     .get("/product")
+    .then((response) => response.data)
+    .catch((error) => {
+      throw new Error(error.message);
+    });
+  return response;
+}
+
+export function suppliersFetch(api: AxiosInstance) {
+  const response: Promise<Supplier[]> = api
+    .get("/supplier")
     .then((response) => response.data)
     .catch((error) => {
       throw new Error(error.message);

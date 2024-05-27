@@ -30,12 +30,6 @@ public class AuthenticationService {
         employee.setName(input.getName());
         employee.setEmail(input.getEmail());
         employee.setPhone(input.getPhone());
-        employee.setState(input.getState());
-        employee.setCity(input.getCity());
-        employee.setZip(input.getZip());
-        employee.setStreet(input.getStreet());
-        employee.setNumber(input.getNumber());
-        employee.setComplement(input.getComplement());
         employee.setIsManager(input.getIsManager());
         employee.setManagerCpf(null);
         employee.setPasswordHash(passwordEncoder.encode(input.getPassword()));

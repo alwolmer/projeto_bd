@@ -1,8 +1,7 @@
 import { ColumnDef } from "@tanstack/react-table";
 import { ArrowUpDown, MoreHorizontal } from "lucide-react";
 
-import { Badge } from "@/components/ui/badge";
-import { Product } from "@/types/storage";
+import { Supplier } from "@/types/storage";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -14,9 +13,24 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Checkbox } from "@/components/ui/checkbox";
 import { toast } from "sonner";
-import { EditProductModal } from "./edit-product.modal";
+import { EditSupplierModal } from "./edit-supplier-modal";
+// import { EditProductModal } from "./edit-product.modal";
 
-export const columns: ColumnDef<Product>[] = [
+export const columns: ColumnDef<Supplier>[] = [
+  {
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          CNPJ
+          <ArrowUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      );
+    },
+    accessorKey: "cnpj",
+  },
   {
     header: ({ column }) => {
       return (
@@ -38,12 +52,12 @@ export const columns: ColumnDef<Product>[] = [
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
-          Weight
+          Phone
           <ArrowUpDown className="ml-2 h-4 w-4" />
         </Button>
       );
     },
-    accessorKey: "weight",
+    accessorKey: "phone",
   },
   {
     header: ({ column }) => {
@@ -52,32 +66,17 @@ export const columns: ColumnDef<Product>[] = [
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
-          Volume
+          Email
           <ArrowUpDown className="ml-2 h-4 w-4" />
         </Button>
       );
     },
-    accessorKey: "volume",
-  },
-  {
-    header: "Categories",
-    accessorKey: "categories",
-    cell: ({ row }) => {
-      return (
-        <>
-          {row.original.categories.map((categoryName) => (
-            <Badge key={categoryName} variant="outline" className="mr-1">
-              {categoryName}
-            </Badge>
-          ))}
-        </>
-      );
-    },
+    accessorKey: "email",
   },
   {
     id: "actions",
     cell: ({ row }) => {
-      const product = row.original;
+      const supplier = row.original;
 
       return (
         <DropdownMenu>
@@ -91,19 +90,18 @@ export const columns: ColumnDef<Product>[] = [
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
             <DropdownMenuItem
               onClick={() => {
-                navigator.clipboard.writeText(product.id!);
-                toast.success("Supplier ID copied");
+                navigator.clipboard.writeText(supplier.cnpj!);
+                toast.success("Supplier CNPJ copied");
               }}
             >
-              Copy product ID
+              Copy supplier CNPJ
             </DropdownMenuItem>
             <DropdownMenuSeparator />
-            <EditProductModal
-              id={product.id}
-              name={product.name}
-              weight={product.weight}
-              volume={product.volume}
-              categories={product.categories}
+            <EditSupplierModal
+              cnpj={supplier.cnpj}
+              name={supplier.name}
+              phone={supplier.phone}
+              email={supplier.email}
             />
           </DropdownMenuContent>
         </DropdownMenu>

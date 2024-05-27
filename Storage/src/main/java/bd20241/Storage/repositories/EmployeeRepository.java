@@ -27,8 +27,8 @@ public class EmployeeRepository {
     }
 
     public Employee save(Employee employee) {
-        String sql = "INSERT INTO employee (cpf, name, email, phone, state, city, zip, street, num, comp, is_manager, manager_cpf, passwordHash) VALUES (?, ? ,?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-        jdbcTemplate.update(sql, employee.getCpf(), employee.getName(), employee.getEmail(), employee.getPhone(), employee.getState(), employee.getCity(), employee.getZip(), employee.getStreet(), employee.getNumber(), employee.getComplement(), employee.getIsManager() ,employee.getManagerCpf(), employee.getPasswordHash());
+        String sql = "INSERT INTO employee (cpf, name, email, phone, is_manager, manager_cpf, passwordHash) VALUES (?, ?, ?, ?, ?, ?, ?)";
+        jdbcTemplate.update(sql, employee.getCpf(), employee.getName(), employee.getEmail(), employee.getPhone(), employee.getIsManager() ,employee.getManagerCpf(), employee.getPasswordHash());
         return employee;
     }
     
@@ -40,12 +40,6 @@ public class EmployeeRepository {
             employee.setName(rs.getString("name"));
             employee.setEmail(rs.getString("email"));
             employee.setPhone(rs.getString("phone"));
-            employee.setState(rs.getString("state"));
-            employee.setCity(rs.getString("city"));
-            employee.setZip(rs.getString("zip"));
-            employee.setStreet(rs.getString("street"));
-            employee.setNumber(rs.getString("num"));
-            employee.setComplement(rs.getString("comp"));
             employee.setIsManager(rs.getBoolean("is_manager"));
             employee.setManagerCpf(rs.getString("manager_cpf"));
             employee.setPasswordHash(rs.getString("passwordHash"));

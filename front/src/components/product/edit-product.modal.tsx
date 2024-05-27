@@ -5,7 +5,7 @@ import { useForm } from "@tanstack/react-form";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import { Button } from "../ui/button";
-import { ChevronsUpDown, Loader2, PlusCircle } from "lucide-react";
+import { ChevronsUpDown, Loader2 } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
@@ -91,7 +91,18 @@ export const EditProductModal = ({
     queryFn: () => categoriesFetch(api),
   });
 
-  if (isPending) return <div>Loading...</div>;
+  if (isPending)
+    return (
+      <Button
+        variant="ghost"
+        size="sm"
+        className="w-full text-left justify-start text-sm"
+        disabled
+      >
+        <Loader2 />
+        <span className="ml-1">Loading...</span>
+      </Button>
+    );
 
   if (error) {
     return <div>Error</div>;

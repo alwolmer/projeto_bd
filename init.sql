@@ -28,6 +28,18 @@ CREATE TABLE IF NOT EXISTS product_supplier (
     PRIMARY KEY(cnpj)
 );
 
+CREATE TABLE IF NOT EXISTS employee (
+    cpf CHAR(14) NOT NULL,
+    name VARCHAR(255) NOT NULL,
+    phone CHAR(15) NOT NULL UNIQUE,
+    email VARCHAR(255) NOT NULL UNIQUE,
+    passwordHash VARCHAR(255) NOT NULL,
+    is_manager BOOLEAN NOT NULL,
+    manager_cpf VARCHAR(14),
+    PRIMARY KEY(cpf),
+    FOREIGN KEY(manager_cpf) REFERENCES employee(cpf)
+);
+
 CREATE TABLE IF NOT EXISTS item (
     id CHAR(23) NOT NULL,
     product_id CHAR(23) NOT NULL,
@@ -39,18 +51,6 @@ CREATE TABLE IF NOT EXISTS item (
     FOREIGN KEY (product_id) REFERENCES product(id),
     FOREIGN KEY (supplier_cnpj) REFERENCES product_supplier(cnpj),
     FOREIGN KEY (employee_cpf) REFERENCES employee(cpf)
-);
-
-CREATE TABLE IF NOT EXISTS employee (
-    cpf CHAR(14) NOT NULL,
-    name VARCHAR(255) NOT NULL,
-    phone CHAR(15) NOT NULL UNIQUE,
-    email VARCHAR(255) NOT NULL UNIQUE,
-    passwordHash VARCHAR(255) NOT NULL,
-    is_manager BOOLEAN NOT NULL,
-    manager_cpf VARCHAR(14),
-    PRIMARY KEY(cpf),
-    FOREIGN KEY(manager_cpf) REFERENCES employee(cpf)
 );
 
 CREATE TABLE IF NOT EXISTS discard (
@@ -97,7 +97,7 @@ CREATE TABLE IF NOT EXISTS delivery_address (
     FOREIGN KEY(client_id) REFERENCES client(id)
 );
 
-CREATE TABLE IF NOT EXISTS order (
+CREATE TABLE IF NOT EXISTS orders (
     id CHAR(23) NOT NULL,
     client_id CHAR(23) NOT NULL,
     employee_cpf CHAR(14) NOT NULL,
@@ -118,7 +118,7 @@ CREATE TABLE IF NOT EXISTS package (
     carrier_cnpj CHAR(18) NOT NULL,
     fragile BOOLEAN,
     PRIMARY KEY(id),
-    FOREIGN KEY(order_id) REFERENCES order(id),
+    FOREIGN KEY(order_id) REFERENCES orders(id),
     FOREIGN KEY(carrier_cnpj) REFERENCES carrier(cnpj)
 );
 
@@ -135,7 +135,7 @@ CREATE TABLE IF NOT EXISTS ordered_item (
     order_id CHAR(23) NOT NULL,
     PRIMARY KEY(item_id, order_id),
     FOREIGN KEY(item_id) REFERENCES item(id),
-    FOREIGN KEY(order_id) REFERENCES order(id)
+    FOREIGN KEY(order_id) REFERENCES orders(id)
 );
 
 

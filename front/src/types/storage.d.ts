@@ -10,3 +10,10 @@ export interface Product {
   volume: number;
   categories: string[];
 }
+
+export interface Supplier {
+  cnpj?: string;
+  name: string;
+  phone: string;
+  email: string;
+}

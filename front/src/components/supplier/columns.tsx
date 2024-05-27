@@ -14,7 +14,6 @@ import {
 import { Checkbox } from "@/components/ui/checkbox";
 import { toast } from "sonner";
 import { EditSupplierModal } from "./edit-supplier-modal";
-// import { EditProductModal } from "./edit-product.modal";
 
 export const columns: ColumnDef<Supplier>[] = [
   {

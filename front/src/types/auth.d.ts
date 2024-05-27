@@ -11,10 +11,11 @@ export interface LoginResponse {
 }
 
 export interface Employee {
-  cpf: string;
+  cpf?: string;
   name: string;
   email: string;
   phone: string;
   isManager: boolean;
-  managerCpf: string | null;
+  managerCpf?: string | null;
+  passwordHash?: string;
 }

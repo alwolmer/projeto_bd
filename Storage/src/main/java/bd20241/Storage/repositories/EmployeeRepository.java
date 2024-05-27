@@ -2,6 +2,7 @@ package bd20241.Storage.repositories;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -30,6 +31,16 @@ public class EmployeeRepository {
         String sql = "INSERT INTO employee (cpf, name, email, phone, is_manager, manager_cpf, passwordHash) VALUES (?, ?, ?, ?, ?, ?, ?)";
         jdbcTemplate.update(sql, employee.getCpf(), employee.getName(), employee.getEmail(), employee.getPhone(), employee.getIsManager() ,employee.getManagerCpf(), employee.getPasswordHash());
         return employee;
+    }
+
+    public List<Employee> findAll() {
+        String sql = "SELECT * FROM employee";
+        return jdbcTemplate.query(sql, new EmployeeRowMapper());
+    }
+
+    public void update(Employee employee) {
+        String sql = "UPDATE employee SET name = ?, email = ?, phone = ?, is_manager = ?, manager_cpf = ?, passwordHash = ? WHERE cpf = ?";
+        jdbcTemplate.update(sql, employee.getName(), employee.getEmail(), employee.getPhone(), employee.getIsManager(), employee.getManagerCpf(), employee.getPasswordHash(), employee.getCpf());
     }
     
     private static class EmployeeRowMapper implements RowMapper<Employee> {

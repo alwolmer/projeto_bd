@@ -1,7 +1,8 @@
 import { ColumnDef } from "@tanstack/react-table";
-import { Category } from "@/types/storage";
-import { Button } from "@/components/ui/button";
 import { ArrowUpDown, MoreHorizontal } from "lucide-react";
+
+import { Item } from "@/types/storage";
+import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -11,24 +12,25 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Checkbox } from "@/components/ui/checkbox";
-import { DeleteCategoryModal } from "./delete-category-modal";
-import { EditCategoryModal } from "./edit-category-modal";
 import { toast } from "sonner";
+// import { EditSupplierModal } from "./edit-supplier-modal";
 
-export const columns: ColumnDef<Category>[] = [
+export const columns: ColumnDef<Item>[] = [
   {
-    header: ({ column }) => {
-      return (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
-          ID
-          <ArrowUpDown className="ml-2 h-4 w-4" />
-        </Button>
-      );
-    },
+    header: "ID",
     accessorKey: "id",
+  },
+  {
+    header: "Product ID",
+    accessorKey: "productId",
+  },
+  {
+    header: "Supplier CNPJ",
+    accessorKey: "supplierCnpj",
+  },
+  {
+    header: "Employee CPF",
+    accessorKey: "employeeCpf",
   },
   {
     header: ({ column }) => {
@@ -37,17 +39,31 @@ export const columns: ColumnDef<Category>[] = [
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
-          Name
+          Created At
           <ArrowUpDown className="ml-2 h-4 w-4" />
         </Button>
       );
     },
-    accessorKey: "name",
+    accessorKey: "createdAt",
+  },
+  {
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Updated At
+          <ArrowUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      );
+    },
+    accessorKey: "updatedAt",
   },
   {
     id: "actions",
     cell: ({ row }) => {
-      const category = row.original;
+      const item = row.original;
 
       return (
         <DropdownMenu>
@@ -61,15 +77,19 @@ export const columns: ColumnDef<Category>[] = [
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
             <DropdownMenuItem
               onClick={() => {
-                navigator.clipboard.writeText(category.id);
-                toast.success("Category ID copied");
+                navigator.clipboard.writeText(item.id!);
+                toast.success("Item id copied");
               }}
             >
-              Copy category ID
+              Copy item id
             </DropdownMenuItem>
             <DropdownMenuSeparator />
-            <EditCategoryModal id={category.id} name={category.name} />
-            <DeleteCategoryModal id={category.id} />
+            {/* <EditSupplierModal
+              cnpj={supplier.cnpj}
+              name={supplier.name}
+              phone={supplier.phone}
+              email={supplier.email}
+            /> */}
           </DropdownMenuContent>
         </DropdownMenu>
       );

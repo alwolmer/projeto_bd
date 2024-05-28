@@ -19,12 +19,12 @@ public class OrderedItemRepository {
     }
     
     public void save(OrderedItem orderedItem) {
-        String sql = "INSERT INTO ordered_items (item_id, order_id) VALUES (?, ?)";
+        String sql = "INSERT INTO ordered_item (item_id, order_id) VALUES (?, ?)";
         jdbcTemplate.update(sql, orderedItem.getItemId(), orderedItem.getOrderId());
     }
 
     public void delete(OrderedItem orderedItem) {
-        String sql = "DELETE FROM ordered_items WHERE item_id = ? AND order_id = ?";
+        String sql = "DELETE FROM ordered_item WHERE item_id = ? AND order_id = ?";
         jdbcTemplate.update(sql, orderedItem.getItemId(), orderedItem.getOrderId());
     }
 

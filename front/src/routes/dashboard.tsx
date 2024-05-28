@@ -27,6 +27,7 @@ import {
   Menu,
   Package,
   Plane,
+  ShoppingBasket,
   Tag,
   Trash2,
   Truck,
@@ -156,6 +157,13 @@ function Navbar() {
                 <MapPin className="h-4 w-4" />
                 Delivery Address
               </Link>
+              <Link
+                to="/dashboard/order"
+                className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary"
+              >
+                <ShoppingBasket className="h-4 w-4" />
+                Orders
+              </Link>
             </nav>
           </div>
           <div className="mt-auto p-4"></div>
@@ -252,6 +260,13 @@ function Navbar() {
                 >
                   <MapPin className="h-4 w-4" />
                   Delivery Address
+                </Link>
+                <Link
+                  to="/dashboard/order"
+                  className="mx-[-0.65rem] flex items-center gap-4 rounded-xl px-3 py-2 text-muted-foreground hover:text-foreground"
+                >
+                  <ShoppingBasket className="h-4 w-4" />
+                  Orders
                 </Link>
               </nav>
             </SheetContent>

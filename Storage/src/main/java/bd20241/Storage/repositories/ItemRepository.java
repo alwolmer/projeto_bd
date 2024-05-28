@@ -37,6 +37,11 @@ public class ItemRepository {
         jdbcTemplate.update(sql, id);
     }
 
+    public List<Item> findStock() {
+        String sql = "SELECT * FROM current_stock";
+        return jdbcTemplate.query(sql, new ItemRowMapper());
+    }
+
 
     private static class ItemRowMapper implements RowMapper<Item> {
         @Override
@@ -51,5 +56,5 @@ public class ItemRepository {
             return item;
         }
     }
-    
+        
 }

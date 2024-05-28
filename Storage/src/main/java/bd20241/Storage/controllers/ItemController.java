@@ -44,5 +44,10 @@ public class ItemController {
 
         return ResponseEntity.noContent().build();
     }
+
+    @GetMapping("/stock")
+    public ResponseEntity<List<Item>> getStock() {
+        return ResponseEntity.ok(itemService.getStock());
+    }
     
 }

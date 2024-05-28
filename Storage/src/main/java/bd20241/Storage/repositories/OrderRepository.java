@@ -20,8 +20,8 @@ public class OrderRepository {
     }
 
     public void save(Order order) {
-        String sql = "INSERT INTO orders (id, client_id, delivery_address_id, employee_cpf, carrier_cnpj, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?, ?)";
-        jdbcTemplate.update(sql, order.getId(), order.getClientId(), order.getDeliveryAddressId(), order.getEmployeeCpf(), order.getCarrierCnpj(), order.getCreatedAt(), order.getUpdatedAt());
+        String sql = "INSERT INTO orders (id, client_id, delivery_address_id, employee_cpf, carrier_cnpj, tracking_code) VALUES (?, ?, ?, ?, ?, ?)";
+        jdbcTemplate.update(sql, order.getId(), order.getClientId(), order.getDeliveryAddressId(), order.getEmployeeCpf(), order.getCarrierCnpj(), order.getTrackingCode());
     }
 
     public Order findById(String id) {
@@ -30,8 +30,8 @@ public class OrderRepository {
     }
 
     public void updateOrder(Order order) {
-        String sql = "UPDATE orders SET client_id = ?, delivery_address_id = ?, employee_cpf = ?, carrier_cnpj = ?, created_at = ?, updated_at = ? WHERE id = ?";
-        jdbcTemplate.update(sql, order.getClientId(), order.getDeliveryAddressId(), order.getEmployeeCpf(), order.getCarrierCnpj(), order.getCreatedAt(), order.getUpdatedAt(), order.getId());
+        String sql = "UPDATE orders SET client_id = ?, delivery_address_id = ?, employee_cpf = ?, carrier_cnpj = ?, tracking_code = ?, created_at = ?, updated_at = ? WHERE id = ?";
+        jdbcTemplate.update(sql, order.getClientId(), order.getDeliveryAddressId(), order.getEmployeeCpf(), order.getCarrierCnpj(), order.getTrackingCode(), order.getCreatedAt(), order.getUpdatedAt(), order.getId());
     }
 
     public void deleteById(String id) {
@@ -53,6 +53,7 @@ public class OrderRepository {
             order.setClientId(rs.getString("client_id"));
             order.setDeliveryAddressId(rs.getString("delivery_address_id"));
             order.setEmployeeCpf(rs.getString("employee_cpf"));
+            order.setTrackingCode(rs.getString("tracking_code"));
             order.setCarrierCnpj(rs.getString("carrier_cnpj"));
             order.setCreatedAt(rs.getDate("created_at"));
             order.setUpdatedAt(rs.getDate("updated_at"));

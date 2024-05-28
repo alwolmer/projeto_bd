@@ -3,6 +3,8 @@ package bd20241.Storage.controllers;
 import java.util.List;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -13,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import bd20241.Storage.models.Order;
+import bd20241.Storage.payloads.requests.CreateOrderRequest;
 import bd20241.Storage.services.OrderService;
 
 @RestController
@@ -30,7 +33,11 @@ public class OrderController {
     }
 
     @PostMapping
-    public ResponseEntity<Order> createOrder(@RequestBody Order order) {
+    public ResponseEntity<Order> createOrder(@RequestBody CreateOrderRequest order) {
+        UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String currentCpf = userDetails.getUsername();
+        order.setEmployeeCpf(currentCpf);
+        
         return ResponseEntity.ok(orderService.createOrder(order));
     }
 

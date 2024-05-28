@@ -1,6 +1,6 @@
-package bd20241.Storage.models;
+package bd20241.Storage.payloads.requests;
 
-import java.util.Date;
+import java.util.ArrayList;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -11,13 +11,10 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class Order {
-    private String id;
+public class CreateOrderRequest {
     private String clientId;
     private String employeeCpf;
     private String deliveryAddressId;
     private String carrierCnpj;
-    private String trackingCode;
-    private Date createdAt;
-    private Date updatedAt;
+    private ArrayList<String> itemIds;
 }

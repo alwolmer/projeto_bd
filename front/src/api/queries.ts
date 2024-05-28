@@ -6,6 +6,7 @@ import {
   Client,
   Discard,
   Item,
+  Order,
   Product,
   Supplier,
 } from "@/types/storage";
@@ -117,6 +118,28 @@ export function clientsFetch(api: AxiosInstance) {
 export function addressFetch(api: AxiosInstance) {
   const response: Promise<Address[]> = api
     .get("/delivery-address")
+    .then((response) => response.data)
+    .catch((error) => {
+      throw new Error(error.message);
+    });
+
+  return response;
+}
+
+export function ordersFetch(api: AxiosInstance) {
+  const response: Promise<Order[]> = api
+    .get("/order")
+    .then((response) => response.data)
+    .catch((error) => {
+      throw new Error(error.message);
+    });
+
+  return response;
+}
+
+export function stockFetch(api: AxiosInstance) {
+  const response: Promise<Item[]> = api
+    .get("/item/stock")
     .then((response) => response.data)
     .catch((error) => {
       throw new Error(error.message);

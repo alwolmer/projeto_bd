@@ -21,6 +21,7 @@ import { Route as IndexImport } from './routes/index'
 
 const DashboardSupplierLazyImport = createFileRoute('/dashboard/supplier')()
 const DashboardProductLazyImport = createFileRoute('/dashboard/product')()
+const DashboardOrderLazyImport = createFileRoute('/dashboard/order')()
 const DashboardItemLazyImport = createFileRoute('/dashboard/item')()
 const DashboardHomeLazyImport = createFileRoute('/dashboard/home')()
 const DashboardEmployeeLazyImport = createFileRoute('/dashboard/employee')()
@@ -59,6 +60,13 @@ const DashboardProductLazyRoute = DashboardProductLazyImport.update({
   getParentRoute: () => DashboardRoute,
 } as any).lazy(() =>
   import('./routes/dashboard.product.lazy').then((d) => d.Route),
+)
+
+const DashboardOrderLazyRoute = DashboardOrderLazyImport.update({
+  path: '/order',
+  getParentRoute: () => DashboardRoute,
+} as any).lazy(() =>
+  import('./routes/dashboard.order.lazy').then((d) => d.Route),
 )
 
 const DashboardItemLazyRoute = DashboardItemLazyImport.update({
@@ -165,6 +173,10 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardItemLazyImport
       parentRoute: typeof DashboardImport
     }
+    '/dashboard/order': {
+      preLoaderRoute: typeof DashboardOrderLazyImport
+      parentRoute: typeof DashboardImport
+    }
     '/dashboard/product': {
       preLoaderRoute: typeof DashboardProductLazyImport
       parentRoute: typeof DashboardImport
@@ -189,6 +201,7 @@ export const routeTree = rootRoute.addChildren([
     DashboardEmployeeLazyRoute,
     DashboardHomeLazyRoute,
     DashboardItemLazyRoute,
+    DashboardOrderLazyRoute,
     DashboardProductLazyRoute,
     DashboardSupplierLazyRoute,
   ]),

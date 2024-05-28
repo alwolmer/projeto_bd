@@ -59,3 +59,14 @@ export interface Address {
   details: string;
   clientId: string;
 }
+
+export interface Order {
+  id?: string;
+  clientId: string;
+  employeeCpf?: string;
+  deliveryAddressId: string;
+  carrierCnpj: string;
+  trackingCode?: string;
+  createdAt?: Date;
+  updatedAt?: Date;
+}

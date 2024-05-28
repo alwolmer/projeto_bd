@@ -28,5 +28,9 @@ public class ItemService {
     public void deleteItem(String id) {
         itemRepository.deleteById(id);
     }
+
+    public List<Item> getStock() {
+        return itemRepository.findStock();
+    }
     
 }

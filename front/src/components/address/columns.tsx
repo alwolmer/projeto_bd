@@ -14,7 +14,6 @@ import {
 import { Checkbox } from "@/components/ui/checkbox";
 import { toast } from "sonner";
 import { DeleteAddressModal } from "./delete-address-modal";
-// import { DeleteClientModal } from "./delete-client-modal";
 
 export const columns: ColumnDef<Address>[] = [
   {

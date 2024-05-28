@@ -506,4 +506,3 @@ FROM item i
 LEFT JOIN discard d ON i.id = d.item_id
 LEFT JOIN ordered_item oi ON i.id = oi.item_id
 WHERE d.item_id IS NULL AND oi.item_id IS NULL;
-

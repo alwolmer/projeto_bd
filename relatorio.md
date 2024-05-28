@@ -181,13 +181,579 @@ CREATE TABLE IF NOT EXISTS refresh_token (
 ); 
 ```
 
-```
+## Consultas (ligadas a operações CRUD)
 
 ```
+-- CATEGORIAS
 
+- Insere uma nova categoria na tabela 'category'
+INSERT INTO category (id, cat_name) VALUES (?, ?);
 
+-- Seleciona todas as categorias da tabela 'category'
+SELECT * FROM category;
+
+-- Deleta uma categoria pelo seu ID na tabela 'category'
+DELETE FROM category WHERE id = ?;
+
+-- Atualiza o nome de uma categoria pelo seu ID na tabela 'category'
+UPDATE category SET cat_name = ? WHERE id = ?;
+
+-- Seleciona uma categoria pelo seu nome na tabela 'category'
+SELECT * FROM category WHERE cat_name = ?;
+
+-- Seleciona uma categoria pelo seu ID na tabela 'category'
+SELECT * FROM category WHERE id = ?;
+
+-- PRODUTOS
+
+-- Insere um novo produto na tabela 'product'
+INSERT INTO product (id, prod_name) VALUES (?, ?);
+
+-- Seleciona todos os produtos da tabela 'product'
+SELECT * FROM product;
+
+-- Seleciona um produto pelo seu ID na tabela 'product'
+SELECT * FROM product WHERE id = ?;
+
+-- Atualiza o nome de um produto pelo seu ID na tabela 'product'
+UPDATE product SET prod_name = ? WHERE id = ?;
+
+-- Deleta um produto pelo seu ID na tabela 'product'
+DELETE FROM product WHERE id = ?;
+
+-- FORNECEDOR
+
+-- Insere um novo fornecedor na tabela 'product_supplier'
+INSERT INTO product_supplier (cnpj, name, email, phone) VALUES (?, ?, ?, ?);
+
+-- Seleciona todos os fornecedores da tabela 'product_supplier'
+SELECT * FROM product_supplier;
+
+-- Seleciona um fornecedor pelo seu CNPJ na tabela 'product_supplier'
+SELECT * FROM product_supplier WHERE cnpj = ?;
+
+-- Atualiza os dados de um fornecedor pelo seu CNPJ na tabela 'product_supplier'
+UPDATE product_supplier SET name = ?, email = ?, phone = ? WHERE cnpj = ?;
+
+-- Deleta um fornecedor pelo seu CNPJ na tabela 'product_supplier'
+DELETE FROM product_supplier WHERE cnpj = ?;
+
+-- FUNCIONÁRIO
+
+-- Seleciona um empregado pelo seu CPF na tabela 'employee'
+SELECT * FROM employee WHERE cpf = ?;
+
+-- Insere um novo empregado na tabela 'employee'
+INSERT INTO employee (cpf, name, email, phone, is_manager, manager_cpf, passwordHash) VALUES (?, ?, ?, ?, ?, ?, ?);
+
+-- Seleciona todos os empregados da tabela 'employee'
+SELECT * FROM employee;
+
+-- Atualiza os dados de um empregado pelo seu CPF na tabela 'employee'
+UPDATE employee SET name = ?, email = ?, phone = ?, is_manager = ?, manager_cpf = ?, passwordHash = ? WHERE cpf = ?;
+
+-- Deleta um empregado pelo seu CPF na tabela 'employee'
+DELETE FROM employee WHERE cpf = ?;
+
+-- ITEM CADASTRADO
+
+-- Insere um novo item na tabela 'item'
+INSERT INTO item (id, product_id, supplier_cnpj, employee_cpf) VALUES (?, ?, ?, ?);
+
+-- Seleciona um item pelo seu ID na tabela 'item'
+SELECT * FROM item WHERE id = ?;
+
+-- Seleciona todos os itens da tabela 'item'
+SELECT * FROM item;
+
+-- Deleta um item pelo seu ID na tabela 'item'
+DELETE FROM item WHERE id = ?;
+
+-- Seleciona todos os itens do estoque atual da tabela 'current_stock'
+SELECT * FROM current_stock;
+
+-- (ITEM) DESCARTADO
+
+-- Insere um novo descarte na tabela 'discard'
+INSERT INTO discard (employee_cpf, item_id, discard_reason) VALUES (?, ?, ?);
+
+-- Seleciona um descarte pela combinação de CPF do empregado e ID do item na tabela 'discard'
+SELECT * FROM discard WHERE employee_cpf = ? AND item_id = ?;
+
+-- Seleciona todos os descartes da tabela 'discard'
+SELECT * FROM discard;
+
+-- Deleta um descarte pela combinação de CPF do empregado e ID do item na tabela 'discard'
+DELETE FROM discard WHERE employee_cpf = ? AND item_id = ?;
+
+-- Deleta um descarte pelo ID do item na tabela 'discard'
+DELETE FROM discard WHERE item_id = ?;
+
+-- TRANSPORTADORA
+
+-- Insere uma nova transportadora na tabela 'carrier'
+INSERT INTO carrier (cnpj, name, email, phone) VALUES (?, ?, ?, ?);
+
+-- Seleciona uma transportadora pelo seu CNPJ na tabela 'carrier'
+SELECT * FROM carrier WHERE cnpj = ?;
+
+-- Atualiza os dados de uma transportadora pelo seu CNPJ na tabela 'carrier'
+UPDATE carrier SET name = ?, email = ?, phone = ? WHERE cnpj = ?;
+
+-- Deleta uma transportadora pelo seu CNPJ na tabela 'carrier'
+DELETE FROM carrier WHERE cnpj = ?;
+
+-- Seleciona todas as transportadoras da tabela 'carrier'
+SELECT * FROM carrier;
+
+-- CLIENTE
+
+-- Insere um novo cliente na tabela 'client' usando CPF
+INSERT INTO client (id, name, phone, email, cpf) VALUES (?, ?, ?, ?, ?);
+
+-- Insere um novo cliente na tabela 'client' usando CNPJ
+INSERT INTO client (id, name, phone, email, cnpj) VALUES (?, ?, ?, ?, ?);
+
+-- Seleciona um cliente pelo seu ID na tabela 'client'
+SELECT * FROM client WHERE id = ?;
+
+-- Atualiza os dados de um cliente pelo seu ID na tabela 'client'
+UPDATE client SET name = ?, phone = ?, email = ?, cpf = ?, cnpj = ? WHERE id = ?;
+
+-- Deleta um cliente pelo seu ID na tabela 'client'
+DELETE FROM client WHERE id = ?;
+
+-- Seleciona todos os clientes da tabela 'client'
+SELECT * FROM client;
+
+-- ENDEREÇO ENTREGA
+
+-- Insere um novo endereço de entrega na tabela 'delivery_address'
+INSERT INTO delivery_address (id, recipient_name, state, city, zip, street, number, details, client_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);
+
+-- Seleciona um endereço de entrega pelo seu ID na tabela 'delivery_address'
+SELECT * FROM delivery_address WHERE id = ?;
+
+-- Atualiza os dados de um endereço de entrega pelo seu ID na tabela 'delivery_address'
+UPDATE delivery_address SET recipient_name = ?, state = ?, city = ?, zip = ?, street = ?, number = ?, details = ?, client_id = ? WHERE id = ?;
+
+-- Deleta um endereço de entrega pelo seu ID na tabela 'delivery_address'
+DELETE FROM delivery_address WHERE id = ?;
+
+-- Seleciona todos os endereços de entrega da tabela 'delivery_address'
+SELECT * FROM delivery_address;
+
+-- PEDIDO
+
+-- Insere um novo pedido na tabela 'orders'
+INSERT INTO orders (id, client_id, delivery_address_id, employee_cpf, carrier_cnpj, tracking_code) VALUES (?, ?, ?, ?, ?, ?);
+
+-- Seleciona um pedido pelo seu ID na tabela 'orders'
+SELECT * FROM orders WHERE id = ?;
+
+-- Atualiza os dados de um pedido pelo seu ID na tabela 'orders'
+UPDATE orders SET client_id = ?, delivery_address_id = ?, employee_cpf = ?, carrier_cnpj = ?, tracking_code = ?, created_at = ?, updated_at = ? WHERE id = ?;
+
+-- Deleta um pedido pelo seu ID na tabela 'orders'
+DELETE FROM orders WHERE id = ?;
+
+-- Seleciona todos os pedidos da tabela 'orders'
+SELECT * FROM orders;
+
+-- RELAÇÃO ITEM-PEDIDO
+
+-- Insere um novo item ordenado na tabela 'ordered_item'
+INSERT INTO ordered_item (item_id, order_id) VALUES (?, ?);
+
+-- Deleta um item ordenado pela combinação de ID do item e ID do pedido na tabela 'ordered_item'
+DELETE FROM ordered_item WHERE item_id = ? AND order_id = ?;
 ```
 
+## Consultas (relatórios)
+
+```
+-- PROCEDURES
+
+
+-- procedure to get all items ever registered, able to filter by date, product, supplier, employee or category
+-- all filters optional 
+-- CALL GetStockHistory(NULL, NULL, NULL, NULL, NULL, NULL);
+
+DELIMITER //
+
+CREATE PROCEDURE GetStockHistory (
+    IN startDate DATETIME,
+    IN endDate DATETIME,
+    IN productId CHAR(23),
+    IN supplierCnpj CHAR(18),
+    IN employeeCpf CHAR(14),
+    IN categoryId CHAR(23)
+)
+BEGIN
+    SELECT
+        i.id AS item_id,
+        i.product_id,
+        p.prod_name,
+        i.supplier_cnpj,
+        s.name AS supplier_name,
+        i.employee_cpf,
+        e.name AS employee_name,
+        CASE
+            WHEN d.item_id IS NOT NULL THEN 'Discarded'
+            WHEN oi.item_id IS NOT NULL THEN 'Ordered'
+            ELSE 'In Stock'
+        END AS status,
+        CASE
+            WHEN d.item_id IS NOT NULL THEN d.updated_at
+            WHEN oi.item_id IS NOT NULL THEN o.updated_at
+            ELSE i.updated_at
+        END AS last_update
+    FROM item i
+    JOIN product p ON i.product_id = p.id
+    JOIN product_supplier s ON i.supplier_cnpj = s.cnpj
+    JOIN employee e ON i.employee_cpf = e.cpf
+    JOIN classification c ON p.id = c.product_id
+    JOIN category cat ON c.category_id = cat.id
+    LEFT JOIN discard d ON i.id = d.item_id
+    LEFT JOIN ordered_item oi ON i.id = oi.item_id
+    LEFT JOIN orders o ON oi.order_id = o.id
+    WHERE (startDate IS NULL OR i.created_at >= startDate)
+        AND (endDate IS NULL OR i.created_at <= endDate)
+        AND (productId IS NULL OR i.product_id = productId)
+        AND (supplierCnpj IS NULL OR i.supplier_cnpj = supplierCnpj)
+        AND (employeeCpf IS NULL OR i.employee_cpf = employeeCpf)
+        AND (categoryId IS NULL OR cat.id = categoryId)
+    ORDER BY
+        i.created_at DESC;
+END //
+
+DELIMITER ;
+
+-- VIEWS
+
+-- view to call for items currently in stock, doubles as the list of items eligible for removal
+
+CREATE VIEW current_stock AS
+SELECT i.id, i.product_id, i.supplier_cnpj, i.employee_cpf, i.created_at, i.updated_at
+FROM item i
+LEFT JOIN discard d ON i.id = d.item_id
+LEFT JOIN ordered_item oi ON i.id = oi.item_id
+WHERE d.item_id IS NULL AND oi.item_id IS NULL;
+```
+
+## Triggers, procedures e views
+```
+-- triggers
+
+DELIMITER //
+
+-- cpf xor cnpj for new client
+
+CREATE TRIGGER before_client_insert
+BEFORE INSERT ON client
+FOR EACH ROW
+BEGIN
+    DECLARE cpf_count INT;
+    DECLARE cnpj_count INT;
+
+    IF (NEW.cpf IS NOT NULL AND NEW.cnpj IS NOT NULL) OR (NEW.cpf IS NULL AND NEW.cnpj IS NULL) THEN
+        SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'A client must have either CPF or CNPJ, but not both';
+    END IF;
+
+    IF NEW.cpf IS NOT NULL THEN
+        SELECT COUNT(*) INTO cpf_count FROM client WHERE cpf = NEW.cpf;
+        IF cpf_count > 0 THEN
+            SIGNAL SQLSTATE '45000'
+            SET MESSAGE_TEXT = 'Duplicate CPF not allowed';
+        END IF;
+    END IF;
+
+    IF NEW.cnpj IS NOT NULL THEN
+        SELECT COUNT(*) INTO cnpj_count FROM client WHERE cnpj = NEW.cnpj;
+        IF cnpj_count > 0 THEN
+            SIGNAL SQLSTATE '45000'
+            SET MESSAGE_TEXT = 'Duplicate CNPJ not allowed';
+        END IF;
+    END IF;
+END //
+
+-- cpf xor cnpj for updated client
+
+CREATE TRIGGER before_client_update
+BEFORE UPDATE ON client
+FOR EACH ROW
+BEGIN
+    DECLARE cpf_count INT;
+    DECLARE cnpj_count INT;
+
+    IF (NEW.cpf IS NOT NULL AND NEW.cnpj IS NOT NULL) OR (NEW.cpf IS NULL AND NEW.cnpj IS NULL) THEN
+        SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'A client must have either CPF or CNPJ, but not both';
+    END IF;
+
+    IF NEW.cpf IS NOT NULL THEN
+        SELECT COUNT(*) INTO cpf_count FROM client WHERE cpf = NEW.cpf AND id != OLD.id;
+        IF cpf_count > 0 THEN
+            SIGNAL SQLSTATE '45000'
+            SET MESSAGE_TEXT = 'Duplicate CPF not allowed';
+        END IF;
+    END IF;
+
+    IF NEW.cnpj IS NOT NULL THEN
+        SELECT COUNT(*) INTO cnpj_count FROM client WHERE cnpj = NEW.cnpj AND id != OLD.id;
+        IF cnpj_count > 0 THEN
+            SIGNAL SQLSTATE '45000'
+            SET MESSAGE_TEXT = 'Duplicate CNPJ not allowed';
+        END IF;
+    END IF;
+END //
+
+-- don't allow category deletion if it would leave products without any category
+
+CREATE TRIGGER before_category_delete
+BEFORE DELETE ON category
+FOR EACH ROW
+BEGIN
+DECLARE orphan_count INT;
+
+    -- Count the number of products exclusively associated with the category being deleted
+    SELECT COUNT(*) INTO orphan_count
+    FROM product p
+    WHERE NOT EXISTS (
+        SELECT 1
+        FROM classification c
+        WHERE c.product_id = p.id
+        AND c.category_id != OLD.id
+    );
+
+    -- If there are any products exclusively associated with the category being deleted, prevent deletion
+    IF orphan_count > 0 THEN
+        SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'Cannot delete category because it would leave one or more products without any categories';
+    END IF;
+END //
+
+CREATE TRIGGER before_product_delete
+BEFORE DELETE ON product
+FOR EACH ROW
+BEGIN
+    DECLARE has_orphaned_items BOOLEAN DEFAULT FALSE;
+
+    -- Check if there are any items that would be left without a product
+    SELECT EXISTS (
+        SELECT 1
+        FROM item
+        WHERE product_id = OLD.id
+    ) INTO has_orphaned_items;
+
+    -- If there are orphaned items, prevent deletion
+    IF has_orphaned_items THEN
+        SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'Cannot delete product because it would leave one or more items without a product';
+    ELSE
+        -- If no orphaned items, proceed with deletion
+        DELETE FROM classification WHERE product_id = OLD.id;  -- Example deletion from classification table
+    END IF;
+END //
+
+CREATE TRIGGER before_supplier_delete
+BEFORE DELETE ON product_supplier
+FOR EACH ROW
+BEGIN
+    DECLARE has_orphaned_items BOOLEAN DEFAULT FALSE;
+
+    -- Check if there are any items that would be left without a supplier
+    SELECT EXISTS (
+        SELECT 1
+        FROM item
+        WHERE supplier_cnpj = OLD.cnpj
+    ) INTO has_orphaned_items;
+
+    -- If there are orphaned items, prevent deletion
+    IF has_orphaned_items THEN
+        SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'Cannot delete supplier because it would leave one or more items without a supplier';
+    END IF;
+END //
+
+CREATE TRIGGER before_employee_delete
+BEFORE DELETE ON employee
+FOR EACH ROW
+BEGIN
+    DECLARE has_orphans BOOLEAN DEFAULT FALSE;
+
+    -- Check if there are any related rows (items, discards, or orders) associated with the employee being deleted
+    SELECT EXISTS (
+        SELECT 1
+        FROM item
+        WHERE employee_cpf = OLD.cpf
+        UNION ALL
+        SELECT 1
+        FROM discard
+        WHERE employee_cpf = OLD.cpf
+        UNION ALL
+        SELECT 1
+        FROM orders
+        WHERE employee_cpf = OLD.cpf
+    ) INTO has_orphans;
+
+    -- If there are orphaned items, discards, or orders, prevent deletion
+    IF has_orphans THEN
+        SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'Cannot delete employee because it would leave related items, discards, or orders orphaned';
+    END IF;
+END //
+
+CREATE TRIGGER before_item_delete
+BEFORE DELETE ON item
+FOR EACH ROW
+BEGIN
+    DECLARE has_orphans BOOLEAN DEFAULT FALSE;
+
+    -- Check if there are any related rows (items, discards, or orders) associated with the employee being deleted
+    SELECT EXISTS (
+        SELECT 1
+        FROM discard
+        WHERE item_id = OLD.id
+        UNION ALL
+        SELECT 1
+        FROM ordered_item
+        WHERE item_id = OLD.id
+    ) INTO has_orphans;
+
+    -- If there are orphaned items, discards, or orders, prevent deletion
+    IF has_orphans THEN
+        SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'Cannot delete item because it would leave related discards or ordered items orphaned';
+    END IF;
+END //
+
+CREATE TRIGGER before_client_delete
+BEFORE DELETE ON client
+FOR EACH ROW
+BEGIN
+    DECLARE has_orphaned_orders BOOLEAN DEFAULT FALSE;
+
+    -- Check if there are any orders that would be left without a client
+    SELECT EXISTS (
+        SELECT 1
+        FROM orders
+        WHERE client_id = OLD.id
+    ) INTO has_orphaned_orders;
+
+    -- If there are orphaned orders, prevent deletion
+    IF has_orphaned_orders THEN
+        SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'Cannot delete client because it would leave one or more orders without a client';
+    ELSE
+        -- If no orphaned orders, proceed with deletion
+        DELETE FROM delivery_address WHERE client_id = OLD.id;
+    END IF;
+END //
+
+CREATE TRIGGER before_address_delete
+BEFORE DELETE ON delivery_address
+FOR EACH ROW
+BEGIN
+    DECLARE has_orphaned_orders BOOLEAN DEFAULT FALSE;
+
+    -- Check if there are any orders that would be left without a client
+    SELECT EXISTS (
+        SELECT 1
+        FROM orders
+        WHERE delivery_address_id = OLD.id
+    ) INTO has_orphaned_orders;
+
+    -- If there are orphaned orders, prevent deletion
+    IF has_orphaned_orders THEN
+        SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'Cannot delete delivery address because it would leave one or more orders without a delivery address';
+    END IF;
+END //
+
+CREATE TRIGGER before_carrier_delete
+BEFORE DELETE ON carrier
+FOR EACH ROW
+BEGIN
+    DECLARE has_orphaned_orders BOOLEAN DEFAULT FALSE;
+
+    -- Check if there are any orders that would be left without a client
+    SELECT EXISTS (
+        SELECT 1
+        FROM orders
+        WHERE carrier_cnpj = OLD.cnpj
+    ) INTO has_orphaned_orders;
+
+    -- If there are orphaned orders, prevent deletion
+    IF has_orphaned_orders THEN
+        SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'Cannot delete carrier because it would leave one or more orders without a carrier';
+    END IF;
+END //
+
+
+-- triggers to make sure an item to be discarded has not been previously shipped (for creation and update of entries on discard)
+
+CREATE TRIGGER before_discard_insert
+BEFORE INSERT ON discard
+FOR EACH ROW
+BEGIN
+    IF EXISTS (
+        SELECT 1
+        FROM ordered_item oi
+        WHERE oi.item_id = NEW.item_id
+    ) THEN
+        SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'Item has already been shipped and cannot be discarded.';
+    END IF;
+END //
+
+CREATE TRIGGER before_discard_update
+BEFORE UPDATE ON discard
+FOR EACH ROW
+BEGIN
+    IF EXISTS (
+        SELECT 1
+        FROM ordered_item oi
+        WHERE oi.item_id = NEW.item_id
+    ) THEN
+        SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'Item has already been shipped and cannot be discarded.';
+    END IF;
+END //
+
+-- triggers to make sure an item to be shipped has not been previously discarded (for creation and update of entries on ordered_items)
+
+CREATE TRIGGER before_ordered_item_insert
+BEFORE INSERT ON ordered_item
+FOR EACH ROW
+BEGIN
+    IF EXISTS (
+        SELECT 1
+        FROM discard d
+        WHERE d.item_id = NEW.item_id
+    ) THEN
+        SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'Item has already been discarded and cannot be shipped.';
+    END IF;
+END //
+
+CREATE TRIGGER before_ordered_item_update
+BEFORE UPDATE ON ordered_item
+FOR EACH ROW
+BEGIN
+    IF EXISTS (
+        SELECT 1
+        FROM discard d
+        WHERE d.item_id = NEW.item_id
+    ) THEN
+        SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'Item has already been discarded and cannot be shipped.';
+    END IF;
+END //
+
+DELIMITER ;
 ```
 
 - Nota: para as id's das entidades, quando não naturais (cpf/cnpj), foram utilizados identificadores únicos no padrão NanoId (strings curtas, seguras, amigáveis à URL e customizáveis com baixa chance de colisão). Para mais especificações: https://github.com/ai/nanoid

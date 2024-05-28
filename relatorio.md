@@ -1,10 +1,14 @@
-O processo de desenvolvimento da aplicação "Armazém de seu Zé" percorreu as seguintes etapas:
+# Projeto e Modelagem de Bancos de Dados - 2024.1 - turma A
+## Projeto AV2
+### Equipe: Arthur Wolmer e Diego Peter
 
-1. **Análise de requisitos**
+O processo de desenvolvimento da aplicação cobriu os pontos de 1. a 4. aproximadamente em sequência, com a exploração das tecnologias correndo em paralelo.
+
+# 1. **Análise de requisitos**
 
 Minimundo (criado pela equipe):
 
-Um armazém de produtos de informática precisa controlar seu estoque ao longo do tempo e gerenciar aspectos logísticos relacionados ao fluxo de mercadorias.
+Um **armazém de produtos de informática** precisa controlar seu e**stoque ao longo do tempo e gerenciar aspectos logísticos** relacionados ao fluxo de mercadorias.
 
 O que o armazém armazena são itens, que representam uma "instância" de um produto, fornecido por um fornecedor. É possível que o mesmo produto seja fornecido por mais de um fornecedor, como no caso de GPUs de marcas distintas com o mesmo chipset, ou um mesmo periférico fornecido por importadores distintos. Cada item presente no banco de dados precisa ter um funcionário associado, responsável pelo cadastro, e um timestamp (data e hora) relativo ao cadastro.
 
@@ -24,22 +28,182 @@ Clientes têm nome, dados de contato (telefone e e-mail) e podem ser pessoas fí
 
 Cada cliente pode ter um número arbitrário de endereços de entrega. Endereços de entrega são compostos pelo nome do destinatário e endereço (com estado, municipio, CEP, logradouro, numero e complemento).
 
-Cada pedido expedido, além de cliente e funcionário, também está relacionado a um endereço de entrega e a uma transportadora e gera um ou mais pacotes, que combinados contém todos os itens envolvidos no pedido. Opcionalmente, um pedido pode conter observações de entrega para a transportadora.
-
-Cada pacote está relacionado a exatamente um pedido e um ou mais produtos e contém um código de rastreamento. Pacotes podem ser convencionais ou marcados como frágeis. Somente pacotes marcados como frágeis podem transportar itens frágeis.
+Cada pedido expedido, além de cliente e funcionário, também está relacionado a um endereço de entrega, uma transportadora e possui código de rastreamento.
 
 Transportadoras têm cpnj, nome, dados de contato (telefone e e-mail).
 
-2. Modelagem Conceitual
-3. Mapeamento Lógico-relacional
-4. Modelagem física (init.sql e povoamento)
-   1. 
-5. Desenvolvimento da aplicação
+<div style="page-break-after: always;"></div>
+
+# 2. Modelagem Conceitual
+
+<div style="page-break-after: always;"></div>
+
+# 3. Mapeamento Lógico-relacional
+
+<div style="page-break-after: always;"></div>
+
+# 4. Modelagem física (inclusive init.sql e povoamento)
+
+## Script de criação
+
+``` 
+CREATE TABLE IF NOT EXISTS category (
+    id CHAR(23) NOT NULL,
+    cat_name VARCHAR(255) NOT NULL UNIQUE,
+    PRIMARY KEY (id)
+);
+
+CREATE TABLE IF NOT EXISTS product (
+    id CHAR(23) NOT NULL,
+    prod_name VARCHAR(255) NOT NULL,
+    PRIMARY KEY (id)
+);
+
+CREATE TABLE IF NOT EXISTS classification (
+    product_id CHAR(23) NOT NULL,
+    category_id CHAR(23) NOT NULL,
+    PRIMARY KEY (product_id, category_id),
+    FOREIGN KEY (product_id) REFERENCES product(id),
+    FOREIGN KEY (category_id) REFERENCES category(id)
+);
+
+CREATE TABLE IF NOT EXISTS product_supplier (
+    cnpj CHAR(18) NOT NULL,
+    name VARCHAR(255) NOT NULL,
+    phone CHAR(15) NOT NULL UNIQUE,
+    email VARCHAR(255) NOT NULL UNIQUE,
+    PRIMARY KEY(cnpj)
+);
+
+CREATE TABLE IF NOT EXISTS employee (
+    cpf CHAR(14) NOT NULL,
+    name VARCHAR(255) NOT NULL,
+    phone CHAR(15) NOT NULL UNIQUE,
+    email VARCHAR(255) NOT NULL UNIQUE,
+    passwordHash VARCHAR(255) NOT NULL,
+    is_manager BOOLEAN NOT NULL,
+    manager_cpf VARCHAR(14),
+    PRIMARY KEY(cpf),
+    FOREIGN KEY(manager_cpf) REFERENCES employee(cpf)
+);
+
+CREATE TABLE IF NOT EXISTS item (
+    id CHAR(23) NOT NULL,
+    product_id CHAR(23) NOT NULL,
+    supplier_cnpj CHAR(18) NOT NULL,
+    employee_cpf CHAR(14) NOT NULL,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    PRIMARY KEY (id),
+    FOREIGN KEY (product_id) REFERENCES product(id),
+    FOREIGN KEY (supplier_cnpj) REFERENCES product_supplier(cnpj),
+    FOREIGN KEY (employee_cpf) REFERENCES employee(cpf)
+);
+
+CREATE TABLE IF NOT EXISTS discard (
+    employee_cpf CHAR(14) NOT NULL,
+    item_id CHAR(23) NOT NULL,
+    discard_reason VARCHAR(255) NOT NULL,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    PRIMARY KEY (item_id),
+    FOREIGN KEY (employee_cpf) REFERENCES employee(cpf),
+    FOREIGN KEY (item_id) REFERENCES item(id),
+    CONSTRAINT discardOptions CHECK (discard_reason='Loss' OR discard_reason='Bad Conditioning' OR discard_reason='Fabrication/Transport')
+);
+
+CREATE TABLE IF NOT EXISTS carrier (
+    cnpj CHAR(18) NOT NULL,
+    name VARCHAR(255) NOT NULL UNIQUE,
+    phone CHAR(15) NOT NULL UNIQUE,
+    email VARCHAR(255) NOT NULL UNIQUE,
+    PRIMARY KEY(cnpj)
+);
+
+CREATE TABLE IF NOT EXISTS client (
+    id CHAR(23) NOT NULL, 
+    name VARCHAR(255) NOT NULL,
+    phone CHAR(15) NOT NULL UNIQUE,
+    email VARCHAR(255) NOT NULL UNIQUE,
+    cpf CHAR(14), -- uniqueness guaranteed by custom trigger on create/update
+    cnpj CHAR(18), -- uniqueness guaranteed by custom trigger on create/update
+    PRIMARY KEY(id)
+);
+
+CREATE TABLE IF NOT EXISTS delivery_address (
+    id CHAR(23) NOT NULL,
+    recipient_name VARCHAR(255) NOT NULL,
+    state CHAR(2) NOT NULL,
+    city VARCHAR(100) NOT NULL,
+    zip CHAR(9) NOT NULL,
+    street VARCHAR(255) NOT NULL,
+    number VARCHAR(50) NOT NULL,
+    details VARCHAR(100) NOT NULL,
+    client_id CHAR(23) NOT NULL,
+    PRIMARY KEY(id),
+    FOREIGN KEY(client_id) REFERENCES client(id)
+);
+
+CREATE TABLE IF NOT EXISTS orders (
+    id CHAR(23) NOT NULL,
+    client_id CHAR(23) NOT NULL,
+    employee_cpf CHAR(14) NOT NULL,
+    delivery_address_id CHAR(23) NOT NULL,
+    carrier_cnpj CHAR(18) NOT NULL,
+    tracking_code VARCHAR(255) NOT NULL,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    PRIMARY KEY(id),
+    FOREIGN KEY(client_id) REFERENCES client(id),
+    FOREIGN KEY(employee_cpf) REFERENCES employee(cpf),
+    FOREIGN KEY(delivery_address_id) REFERENCES delivery_address(id),
+    FOREIGN KEY(carrier_cnpj) REFERENCES carrier(cnpj)
+);
+
+CREATE TABLE IF NOT EXISTS ordered_item (
+    item_id CHAR(23) NOT NULL,
+    order_id CHAR(23) NOT NULL,
+    PRIMARY KEY(item_id, order_id),
+    FOREIGN KEY(item_id) REFERENCES item(id),
+    FOREIGN KEY(order_id) REFERENCES orders(id)
+);
+
+
+CREATE TABLE IF NOT EXISTS refresh_token (
+    id BIGINT AUTO_INCREMENT NOT NULL PRIMARY KEY,
+    employee_cpf CHAR(14) NOT NULL,
+    token VARCHAR(255) NOT NULL UNIQUE,
+    expiry_date DATETIME(6) NOT NULL,
+    CONSTRAINT fk_employee
+        FOREIGN KEY (employee_cpf) REFERENCES employee(cpf)
+        ON DELETE CASCADE
+        ON UPDATE CASCADE
+); 
+```
+
+```
+
+```
+
+
+```
+
+```
+
+- Nota: para as id's das entidades, quando não naturais (cpf/cnpj), foram utilizados identificadores únicos no padrão NanoId (strings curtas, seguras, amigáveis à URL e customizáveis com baixa chance de colisão). Para mais especificações: https://github.com/ai/nanoid
+
+
+<div style="page-break-after: always;"></div>
+
+
+# 5. Desenvolvimento da aplicação
    1. Front-end
-      - Framework: React com Vite.
-      - Shadcn para componentes de UI e TanStack para roteamento,queries, tabelas e forms.    
+      - Framework: React com Vite (https://vitejs.dev/)
+      - Shadcn para componentes de UI (https://ui.shadcn.com/) e TanStack para roteamento, queries, tabelas e forms (https://tanstack.com/)    
    2. Back-end
        - Framework: SpringBoot (Maven).
       -  Sem uso de ORM, mas preservando arquitetura do Springboot (controllers-services-repositories), classes JDBC para acesso direto ao banco de dados com queries SQL escritas à mão.
-   3. Conteinerização
-      - Docker Compose: Para orquestrar os containers do backend, frontend e banco de dados (inclusive execução automática do script de inicialização)
+   3. Banco de dados:
+      - Docker Compose para orquestrar os containers do backend, frontend e banco de dados (inclusive execução automática do script de inicialização)
+      - Triggers para garantir integridade do banco dentro das regras de negócio e impedir a invalidação da funcionalidade do histórico de estoque
+      - Procedures e views para extração de relatórios

@@ -101,6 +101,7 @@ CREATE TABLE IF NOT EXISTS orders (
     employee_cpf CHAR(14) NOT NULL,
     delivery_address_id CHAR(23) NOT NULL,
     carrier_cnpj CHAR(18) NOT NULL,
+    tracking_code VARCHAR(255) NOT NULL,
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
     updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     PRIMARY KEY(id),
@@ -108,24 +109,6 @@ CREATE TABLE IF NOT EXISTS orders (
     FOREIGN KEY(employee_cpf) REFERENCES employee(cpf),
     FOREIGN KEY(delivery_address_id) REFERENCES delivery_address(id),
     FOREIGN KEY(carrier_cnpj) REFERENCES carrier(cnpj)
-);
-
-CREATE TABLE IF NOT EXISTS package (
-    id CHAR(23) NOT NULL,
-    tracking_code VARCHAR(255) NOT NULL,
-    delivery_notes VARCHAR(255),
-    order_id CHAR(23) NOT NULL,
-    fragile BOOLEAN,
-    PRIMARY KEY(id),
-    FOREIGN KEY(order_id) REFERENCES orders(id)
-);
-
-CREATE TABLE IF NOT EXISTS packaged_item (
-    item_id CHAR(23) NOT NULL,
-    package_id CHAR(23) NOT NULL,
-    PRIMARY KEY(item_id, package_id),
-    FOREIGN KEY(item_id) REFERENCES item(id),
-    FOREIGN KEY(package_id) REFERENCES package(id)
 );
 
 CREATE TABLE IF NOT EXISTS ordered_item (
@@ -151,23 +134,6 @@ CREATE TABLE IF NOT EXISTS refresh_token (
 -- triggers
 
 DELIMITER //
-
-CREATE TRIGGER before_package_insert
-BEFORE INSERT ON package
-FOR EACH ROW
-BEGIN
-    DECLARE item_count INT;
-    SELECT COUNT(*) INTO item_count
-    FROM packaged_item pi
-    JOIN item i ON pi.item_id = i.id
-    JOIN product p ON p.id = i.product_id
-    WHERE pi.package_id = NEW.id AND p.fragile = TRUE;
-
-    IF item_count > 0 AND NEW.fragile = FALSE THEN
-        SIGNAL SQLSTATE '45000'
-        SET MESSAGE_TEXT = 'A package containing fragile items must be marked as fragile.';
-    END IF;
-END //
 
 -- cpf xor cnpj for new client
 
@@ -342,16 +308,12 @@ BEGIN
         SELECT 1
         FROM ordered_item
         WHERE item_id = OLD.id
-        UNION ALL
-        SELECT 1
-        FROM packaged_item
-        WHERE item_id = OLD.id
     ) INTO has_orphans;
 
     -- If there are orphaned items, discards, or orders, prevent deletion
     IF has_orphans THEN
         SIGNAL SQLSTATE '45000'
-        SET MESSAGE_TEXT = 'Cannot delete item because it would leave related discards, ordered items or packaged items orphaned';
+        SET MESSAGE_TEXT = 'Cannot delete item because it would leave related discards or ordered items orphaned';
     END IF;
 END //
 
@@ -415,51 +377,6 @@ BEGIN
     IF has_orphaned_orders THEN
         SIGNAL SQLSTATE '45000'
         SET MESSAGE_TEXT = 'Cannot delete carrier because it would leave one or more orders without a carrier';
-    END IF;
-END //
-
--- triggers to make sure packaged items belong to the order that the package refers to (for creation and update of entries on packaged_items)
-
-CREATE TRIGGER before_packaged_item_insert
-BEFORE INSERT ON packaged_item
-FOR EACH ROW
-BEGIN
-    DECLARE order_id CHAR(23);
-    
-    SELECT o.id INTO order_id
-    FROM orders o
-    JOIN package p ON p.order_id = o.id
-    WHERE p.id = NEW.package_id;
-    
-    IF NOT EXISTS (
-        SELECT 1
-        FROM ordered_item oi
-        WHERE oi.item_id = NEW.item_id AND oi.order_id = order_id
-    ) THEN
-        SIGNAL SQLSTATE '45000'
-        SET MESSAGE_TEXT = 'Item must belong to the order associated with the package.';
-    END IF;
-END //
-
-
-CREATE TRIGGER before_packaged_item_update
-BEFORE UPDATE ON packaged_item
-FOR EACH ROW
-BEGIN
-    DECLARE order_id CHAR(23);
-
-    SELECT o.id INTO order_id
-    FROM orders o
-    JOIN package p ON p.order_id = o.id
-    WHERE p.id = NEW.package_id;
-    
-    IF NOT EXISTS (
-        SELECT 1
-        FROM ordered_item oi
-        WHERE oi.item_id = NEW.item_id AND oi.order_id = order_id
-    ) THEN
-        SIGNAL SQLSTATE '45000'
-        SET MESSAGE_TEXT = 'Item must belong to the order associated with the package.';
     END IF;
 END //
 

@@ -81,7 +81,7 @@ function Navbar() {
               className="flex items-center gap-2 font-semibold"
             >
               <img src="/logo.svg" alt="logo" className="w-6 h-6" />
-              <span className="">Armazém do Seu Zé</span>
+              <span className="">Storage</span>
             </Link>
           </div>
           <div className="flex-1">
@@ -181,7 +181,7 @@ function Navbar() {
                   className="flex items-center gap-2 text-lg font-semibold"
                 >
                   <img src="/logo.svg" alt="logo" className="w-6 h-6" />
-                  Armazém do Seu Zé
+                  Storage
                 </Link>
                 <Link
                   to="/dashboard/home"

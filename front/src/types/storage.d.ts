@@ -47,3 +47,15 @@ export interface Client {
   cpf?: string;
   cnpj?: string;
 }
+
+export interface Address {
+  id?: string;
+  recipientName: string;
+  state: string;
+  city: string;
+  zip: string;
+  street: string;
+  number: string;
+  details: string;
+  clientId: string;
+}

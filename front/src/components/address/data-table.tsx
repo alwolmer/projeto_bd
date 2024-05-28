@@ -27,6 +27,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { NewAddressModal } from "./new-address-modal";
 // import { NewClientModal } from "./new-client-modal";
 // import { NewCarrierModal } from "./new-carrier-modal";
 // import { NewSupplierModal } from "./new-supplier-modal";
@@ -72,6 +73,7 @@ export function AddressDataTable<TData, TValue>({
     <div>
       <div className="flex items-center py-4">
         {/* <NewClientModal /> */}
+        <NewAddressModal />
         <Input
           placeholder="Filter Recipient name..."
           value={

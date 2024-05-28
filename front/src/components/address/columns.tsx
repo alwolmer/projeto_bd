@@ -13,6 +13,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Checkbox } from "@/components/ui/checkbox";
 import { toast } from "sonner";
+import { DeleteAddressModal } from "./delete-address-modal";
 // import { DeleteClientModal } from "./delete-client-modal";
 
 export const columns: ColumnDef<Address>[] = [
@@ -164,6 +165,7 @@ export const columns: ColumnDef<Address>[] = [
             />
             <DeleteCarrierModal cnpj={carrier.cnpj!} /> */}
             {/* <DeleteClientModal id={client.id!} /> */}
+            <DeleteAddressModal id={address.id!} />
           </DropdownMenuContent>
         </DropdownMenu>
       );

@@ -76,8 +76,8 @@ CREATE TABLE IF NOT EXISTS client (
     name VARCHAR(255) NOT NULL,
     phone CHAR(15) NOT NULL UNIQUE,
     email VARCHAR(255) NOT NULL UNIQUE,
-    cpf CHAR(14) UNIQUE,
-    cnpj CHAR(18) UNIQUE,
+    cpf CHAR(14), -- uniqueness guaranteed by custom trigger on create/update
+    cnpj CHAR(18), -- uniqueness guaranteed by custom trigger on create/update
     PRIMARY KEY(id)
 );
 
@@ -148,6 +148,8 @@ CREATE TABLE IF NOT EXISTS refresh_token (
         ON UPDATE CASCADE
 );
 
+-- triggers
+
 DELIMITER //
 
 CREATE TRIGGER before_package_insert
@@ -173,9 +175,28 @@ CREATE TRIGGER before_client_insert
 BEFORE INSERT ON client
 FOR EACH ROW
 BEGIN
+    DECLARE cpf_count INT;
+    DECLARE cnpj_count INT;
+
     IF (NEW.cpf IS NOT NULL AND NEW.cnpj IS NOT NULL) OR (NEW.cpf IS NULL AND NEW.cnpj IS NULL) THEN
         SIGNAL SQLSTATE '45000'
         SET MESSAGE_TEXT = 'A client must have either CPF or CNPJ, but not both';
+    END IF;
+
+    IF NEW.cpf IS NOT NULL THEN
+        SELECT COUNT(*) INTO cpf_count FROM client WHERE cpf = NEW.cpf;
+        IF cpf_count > 0 THEN
+            SIGNAL SQLSTATE '45000'
+            SET MESSAGE_TEXT = 'Duplicate CPF not allowed';
+        END IF;
+    END IF;
+
+    IF NEW.cnpj IS NOT NULL THEN
+        SELECT COUNT(*) INTO cnpj_count FROM client WHERE cnpj = NEW.cnpj;
+        IF cnpj_count > 0 THEN
+            SIGNAL SQLSTATE '45000'
+            SET MESSAGE_TEXT = 'Duplicate CNPJ not allowed';
+        END IF;
     END IF;
 END //
 
@@ -185,9 +206,28 @@ CREATE TRIGGER before_client_update
 BEFORE UPDATE ON client
 FOR EACH ROW
 BEGIN
+    DECLARE cpf_count INT;
+    DECLARE cnpj_count INT;
+
     IF (NEW.cpf IS NOT NULL AND NEW.cnpj IS NOT NULL) OR (NEW.cpf IS NULL AND NEW.cnpj IS NULL) THEN
         SIGNAL SQLSTATE '45000'
         SET MESSAGE_TEXT = 'A client must have either CPF or CNPJ, but not both';
+    END IF;
+
+    IF NEW.cpf IS NOT NULL THEN
+        SELECT COUNT(*) INTO cpf_count FROM client WHERE cpf = NEW.cpf AND id != OLD.id;
+        IF cpf_count > 0 THEN
+            SIGNAL SQLSTATE '45000'
+            SET MESSAGE_TEXT = 'Duplicate CPF not allowed';
+        END IF;
+    END IF;
+
+    IF NEW.cnpj IS NOT NULL THEN
+        SELECT COUNT(*) INTO cnpj_count FROM client WHERE cnpj = NEW.cnpj AND id != OLD.id;
+        IF cnpj_count > 0 THEN
+            SIGNAL SQLSTATE '45000'
+            SET MESSAGE_TEXT = 'Duplicate CNPJ not allowed';
+        END IF;
     END IF;
 END //
 
@@ -378,4 +418,175 @@ BEGIN
     END IF;
 END //
 
+-- triggers to make sure packaged items belong to the order that the package refers to (for creation and update of entries on packaged_items)
+
+CREATE TRIGGER before_packaged_item_insert
+BEFORE INSERT ON packaged_item
+FOR EACH ROW
+BEGIN
+    DECLARE order_id CHAR(23);
+    
+    SELECT o.id INTO order_id
+    FROM orders o
+    JOIN package p ON p.order_id = o.id
+    WHERE p.id = NEW.package_id;
+    
+    IF NOT EXISTS (
+        SELECT 1
+        FROM ordered_item oi
+        WHERE oi.item_id = NEW.item_id AND oi.order_id = order_id
+    ) THEN
+        SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'Item must belong to the order associated with the package.';
+    END IF;
+END //
+
+
+CREATE TRIGGER before_packaged_item_update
+BEFORE UPDATE ON packaged_item
+FOR EACH ROW
+BEGIN
+    DECLARE order_id CHAR(23);
+
+    SELECT o.id INTO order_id
+    FROM orders o
+    JOIN package p ON p.order_id = o.id
+    WHERE p.id = NEW.package_id;
+    
+    IF NOT EXISTS (
+        SELECT 1
+        FROM ordered_item oi
+        WHERE oi.item_id = NEW.item_id AND oi.order_id = order_id
+    ) THEN
+        SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'Item must belong to the order associated with the package.';
+    END IF;
+END //
+
+
+-- triggers to make sure an item to be discarded has not been previously shipped (for creation and update of entries on discard)
+
+CREATE TRIGGER before_discard_insert
+BEFORE INSERT ON discard
+FOR EACH ROW
+BEGIN
+    IF EXISTS (
+        SELECT 1
+        FROM ordered_item oi
+        WHERE oi.item_id = NEW.item_id
+    ) THEN
+        SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'Item has already been shipped and cannot be discarded.';
+    END IF;
+END //
+
+CREATE TRIGGER before_discard_update
+BEFORE UPDATE ON discard
+FOR EACH ROW
+BEGIN
+    IF EXISTS (
+        SELECT 1
+        FROM ordered_item oi
+        WHERE oi.item_id = NEW.item_id
+    ) THEN
+        SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'Item has already been shipped and cannot be discarded.';
+    END IF;
+END //
+
+-- triggers to make sure an item to be shipped has not been previously discarded (for creation and update of entries on ordered_items)
+
+CREATE TRIGGER before_ordered_item_insert
+BEFORE INSERT ON ordered_item
+FOR EACH ROW
+BEGIN
+    IF EXISTS (
+        SELECT 1
+        FROM discard d
+        WHERE d.item_id = NEW.item_id
+    ) THEN
+        SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'Item has already been discarded and cannot be shipped.';
+    END IF;
+END //
+
+CREATE TRIGGER before_ordered_item_update
+BEFORE UPDATE ON ordered_item
+FOR EACH ROW
+BEGIN
+    IF EXISTS (
+        SELECT 1
+        FROM discard d
+        WHERE d.item_id = NEW.item_id
+    ) THEN
+        SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'Item has already been discarded and cannot be shipped.';
+    END IF;
+END //
+
+-- PROCEDURES
+
+
+-- procedure to get all items ever registered, able to filter by date, product, supplier, employee or category
+-- all filters optional 
+-- CALL GetStockHistory(NULL, NULL, NULL, NULL, NULL, NULL);
+
+CREATE PROCEDURE GetStockHistory (
+    IN startDate DATETIME,
+    IN endDate DATETIME,
+    IN productId CHAR(23),
+    IN supplierCnpj CHAR(18),
+    IN employeeCpf CHAR(14),
+    IN categoryId CHAR(23)
+)
+BEGIN
+    SELECT
+        i.id AS item_id,
+        i.product_id,
+        p.prod_name,
+        i.supplier_cnpj,
+        s.name AS supplier_name,
+        i.employee_cpf,
+        e.name AS employee_name,
+        CASE
+            WHEN d.item_id IS NOT NULL THEN 'Discarded'
+            WHEN oi.item_id IS NOT NULL THEN 'Ordered'
+            ELSE 'In Stock'
+        END AS status,
+        CASE
+            WHEN d.item_id IS NOT NULL THEN d.updated_at
+            WHEN oi.item_id IS NOT NULL THEN o.updated_at
+            ELSE i.updated_at
+        END AS last_update
+    FROM item i
+    JOIN product p ON i.product_id = p.id
+    JOIN product_supplier s ON i.supplier_cnpj = s.cnpj
+    JOIN employee e ON i.employee_cpf = e.cpf
+    JOIN classification c ON p.id = c.product_id
+    JOIN category cat ON c.category_id = cat.id
+    LEFT JOIN discard d ON i.id = d.item_id
+    LEFT JOIN ordered_item oi ON i.id = oi.item_id
+    LEFT JOIN orders o ON oi.order_id = o.id
+    WHERE (startDate IS NULL OR i.created_at >= startDate)
+        AND (endDate IS NULL OR i.created_at <= endDate)
+        AND (productId IS NULL OR i.product_id = productId)
+        AND (supplierCnpj IS NULL OR i.supplier_cnpj = supplierCnpj)
+        AND (employeeCpf IS NULL OR i.employee_cpf = employeeCpf)
+        AND (categoryId IS NULL OR cat.id = categoryId)
+    ORDER BY
+        i.created_at DESC;
+END //
+
 DELIMITER ;
+
+-- VIEWS
+
+-- view to call for items currently in stock, doubles as the list of items eligible for removal
+
+CREATE VIEW current_stock AS
+SELECT i.id, i.product_id, i.supplier_cnpj, i.employee_cpf, i.created_at, i.updated_at
+FROM item i
+LEFT JOIN discard d ON i.id = d.item_id
+LEFT JOIN ordered_item oi ON i.id = oi.item_id
+WHERE d.item_id IS NULL AND oi.item_id IS NULL;
+

@@ -20,8 +20,13 @@ public class ClientRepository {
     }
 
     public void save(Client client) {
-        String sql = "INSERT INTO client (id, name, phone, email, cpf, cnpj) VALUES (?, ?, ?, ?, ?, ?)";
-        jdbcTemplate.update(sql, client.getId(), client.getName(), client.getPhone(), client.getEmail(), client.getCpf(), client.getCnpj());
+        if (client.getCnpj() == null) {
+            String sql = "INSERT INTO client (id, name, phone, email, cpf) VALUES (?, ?, ?, ?, ?)";
+            jdbcTemplate.update(sql, client.getId(), client.getName(), client.getPhone(), client.getEmail(), client.getCpf());
+        } else {
+            String sql = "INSERT INTO client (id, name, phone, email, cnpj) VALUES (?, ?, ?, ?, ?)";
+            jdbcTemplate.update(sql, client.getId(), client.getName(), client.getPhone(), client.getEmail(), client.getCnpj());
+        }
     }
 
     public Client findById(String id) {

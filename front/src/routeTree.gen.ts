@@ -28,6 +28,7 @@ const DashboardDiscardLazyImport = createFileRoute('/dashboard/discard')()
 const DashboardClientLazyImport = createFileRoute('/dashboard/client')()
 const DashboardCategoryLazyImport = createFileRoute('/dashboard/category')()
 const DashboardCarrierLazyImport = createFileRoute('/dashboard/carrier')()
+const DashboardAddressLazyImport = createFileRoute('/dashboard/address')()
 
 // Create/Update Routes
 
@@ -109,6 +110,13 @@ const DashboardCarrierLazyRoute = DashboardCarrierLazyImport.update({
   import('./routes/dashboard.carrier.lazy').then((d) => d.Route),
 )
 
+const DashboardAddressLazyRoute = DashboardAddressLazyImport.update({
+  path: '/address',
+  getParentRoute: () => DashboardRoute,
+} as any).lazy(() =>
+  import('./routes/dashboard.address.lazy').then((d) => d.Route),
+)
+
 // Populate the FileRoutesByPath interface
 
 declare module '@tanstack/react-router' {
@@ -124,6 +132,10 @@ declare module '@tanstack/react-router' {
     '/login': {
       preLoaderRoute: typeof LoginImport
       parentRoute: typeof rootRoute
+    }
+    '/dashboard/address': {
+      preLoaderRoute: typeof DashboardAddressLazyImport
+      parentRoute: typeof DashboardImport
     }
     '/dashboard/carrier': {
       preLoaderRoute: typeof DashboardCarrierLazyImport
@@ -169,6 +181,7 @@ declare module '@tanstack/react-router' {
 export const routeTree = rootRoute.addChildren([
   IndexRoute,
   DashboardRoute.addChildren([
+    DashboardAddressLazyRoute,
     DashboardCarrierLazyRoute,
     DashboardCategoryLazyRoute,
     DashboardClientLazyRoute,

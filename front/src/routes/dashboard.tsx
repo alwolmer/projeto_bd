@@ -22,7 +22,8 @@ import {
 } from "@tanstack/react-router";
 import {
   Barcode,
-  Home,
+  LayoutDashboard,
+  MapPin,
   Menu,
   Package,
   Plane,
@@ -89,8 +90,8 @@ function Navbar() {
                 to="/dashboard/home"
                 className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary"
               >
-                <Home className="h-4 w-4" />
-                Home
+                <LayoutDashboard className="h-4 w-4" />
+                Dashboard
               </Link>
               <Link
                 to="/dashboard/category"
@@ -148,6 +149,13 @@ function Navbar() {
                 <UserCircle className="h-4 w-4" />
                 Client
               </Link>
+              <Link
+                to="/dashboard/address"
+                className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary"
+              >
+                <MapPin className="h-4 w-4" />
+                Delivery Address
+              </Link>
             </nav>
           </div>
           <div className="mt-auto p-4"></div>
@@ -179,8 +187,8 @@ function Navbar() {
                   to="/dashboard/home"
                   className="mx-[-0.65rem] flex items-center gap-4 rounded-xl px-3 py-2 text-muted-foreground hover:text-foreground"
                 >
-                  <Home className="h-4 w-4" />
-                  Home
+                  <LayoutDashboard className="h-4 w-4" />
+                  Dashboard
                 </Link>
                 <Link
                   to="/dashboard/category"
@@ -237,6 +245,13 @@ function Navbar() {
                 >
                   <UserCircle className="h-4 w-4" />
                   Client
+                </Link>
+                <Link
+                  to="/dashboard/address"
+                  className="mx-[-0.65rem] flex items-center gap-4 rounded-xl px-3 py-2 text-muted-foreground hover:text-foreground"
+                >
+                  <MapPin className="h-4 w-4" />
+                  Delivery Address
                 </Link>
               </nav>
             </SheetContent>

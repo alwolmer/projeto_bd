@@ -2,6 +2,7 @@ import { Employee } from "@/types/auth";
 import {
   Carrier,
   Category,
+  Client,
   Discard,
   Item,
   Product,
@@ -93,6 +94,17 @@ export function discardsFetch(api: AxiosInstance) {
 export function carriersFetch(api: AxiosInstance) {
   const response: Promise<Carrier[]> = api
     .get("/carrier")
+    .then((response) => response.data)
+    .catch((error) => {
+      throw new Error(error.message);
+    });
+
+  return response;
+}
+
+export function clientsFetch(api: AxiosInstance) {
+  const response: Promise<Client[]> = api
+    .get("/client")
     .then((response) => response.data)
     .catch((error) => {
       throw new Error(error.message);

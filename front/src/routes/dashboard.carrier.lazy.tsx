@@ -28,7 +28,6 @@ function CarrierTable() {
       <h1 className="text-2xl font-semibold">Carriers</h1>
       <div className="container mx-auto py-10">
         <CarrierDataTable columns={columns} data={data} />
-        {/* <SupplierDataTable columns={columns} data={data} /> */}
       </div>
     </>
   );

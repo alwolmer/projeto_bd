@@ -878,6 +878,34 @@ INSERT INTO ordered_item (item_id, order_id) VALUES
        - Framework: SpringBoot (Maven).
       -  Sem uso de ORM, mas preservando arquitetura do Springboot (controllers-services-repositories), classes JDBC para acesso direto ao banco de dados com queries SQL escritas à mão.
    3. Banco de dados:
-      - Docker Compose para orquestrar os containers do backend, frontend e banco de dados (inclusive execução automática do script de inicialização)
+      - Docker Compose para orquestrar o container do banco de dados (inclusive execução automática do script de inicialização)
       - Triggers para garantir integridade do banco dentro das regras de negócio e impedir a invalidação da funcionalidade do histórico de estoque
       - Procedures e views para extração de relatórios
+
+<div style="page-break-after: always;"></div>
+
+# 6. Instalação
+
+Banco de dados
+```
+# ./projeto_bd
+(sudo) docker compose up
+# OR
+(sudo) docker-compose up
+```
+  
+Backend
+```
+# ./projeto_bd/Storage
+mvn install
+# THEN
+mvn spring-boot:run
+```
+
+Frontend
+```
+# ./projeto_bd/front
+npm install
+# THEN
+npm run dev
+```

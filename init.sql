@@ -506,3 +506,101 @@ FROM item i
 LEFT JOIN discard d ON i.id = d.item_id
 LEFT JOIN ordered_item oi ON i.id = oi.item_id
 WHERE d.item_id IS NULL AND oi.item_id IS NULL;
+
+-- POPULAR CATEGORIAS
+INSERT INTO category (id, cat_name) VALUES 
+('MFaHmqyYdMeztRkWc4eGXrq', 'Motherboards'),
+('kSjDUSds9ucAM5XSyh4911g', 'Processors'),
+('w5B8xPtg26A6n6q3WwGGS6F', 'RAM'),
+('UE2uucTcpYEnCpfbEtTgYGd', 'Graphics Card'),
+('Ds5M67jbRKVg6fkp2xXFHPs', 'SSD'),
+('E8DBHzPAjWDJXnuxbZf3JtK', 'Keyboard'),
+('4VuyVqAKz3u49YP8bayhBcX', 'Mouse');
+
+-- POPULAR PRODUCTS
+INSERT INTO product (id, prod_name) VALUES
+('AyAurtQGureTsGruqGqabvE', 'Intel Core i5-12600K'),
+('MY26fVpYMBRE5dJUJ3DfMCC', 'RTX 4090'),
+('Rh7dUcHQ975K2WXbECF7wAV', 'Corsair Vengeance RGB Pro 32GB'),
+('kt64HYU56aUEhEY6Mez5n8m', 'ASUS ROG Strix Z690-E Gaming WiFi'),
+('7FvgvE83SNpQZfKwWPQ5ebP', 'Samsung 970 EVO Plus 1TB'),
+('qURnfEbrC8msnVmqPhskXcE', 'Logitech G Pro X Superlight'),
+('WnQYM5rmMa5F88GmwGFqevf', 'Razer BlackWidow V3 Pro');
+
+-- POPULAR classifications
+INSERT INTO classification (product_id, category_id) VALUES
+('AyAurtQGureTsGruqGqabvE', 'kSjDUSds9ucAM5XSyh4911g'),
+('MY26fVpYMBRE5dJUJ3DfMCC', 'UE2uucTcpYEnCpfbEtTgYGd'),
+('Rh7dUcHQ975K2WXbECF7wAV', 'w5B8xPtg26A6n6q3WwGGS6F'),
+('kt64HYU56aUEhEY6Mez5n8m', 'MFaHmqyYdMeztRkWc4eGXrq'),
+('7FvgvE83SNpQZfKwWPQ5ebP', 'Ds5M67jbRKVg6fkp2xXFHPs'),
+('qURnfEbrC8msnVmqPhskXcE', '4VuyVqAKz3u49YP8bayhBcX'),
+('WnQYM5rmMa5F88GmwGFqevf', 'E8DBHzPAjWDJXnuxbZf3JtK');
+
+-- POPULAR SUPPLIERS
+INSERT INTO product_supplier (cnpj, name, phone, email) VALUES
+('71.265.232/0001-10', 'ASUS', '(17) 98162-4696', 'contato@fornecedorasus.com'),
+('78.907.424/0001-21', 'Intel', '(94) 96770-6596', 'contato@fornecedorintel.com'),
+('58.194.520/0001-62', 'Nvidia', '(96) 97644-5774', 'contato@fornecedornvidia.com'),
+('85.893.777/0001-85', 'Corsair', '(89) 96814-8553', 'contato@fornecedorcorsair.com'),
+('76.043.670/0001-57', 'Samsung', '(63) 97321-7078', 'contato@fornecedorsamsung.com'),
+('02.206.558/0001-53', 'Logitech', '(99) 99417-4743', 'contato@fornecedorlogitech.com'),
+('77.209.429/0001-18', 'Razer', '(64) 98452-7351', 'contato@fornecedorrazer.com');
+
+-- POPULAR EMPLOYEES
+INSERT INTO employee (cpf, name, phone, email, passwordHash, is_manager, manager_cpf) VALUES
+('302.411.040-25', 'João Silva', '(27) 97610-8281', 'joao.silva@example.com', '123456', TRUE, NULL),
+('122.110.370-97', 'Maria Santos', '(98) 97167-6246', 'maria.santos@example.com', '123456', FALSE, '302.411.040-25'),
+('183.488.760-73', 'Carlos Pereira', '(27) 98045-3486', 'carlos.pereira@example.com', '123456', FALSE, '302.411.040-25');
+
+-- POPULAR ITEMS
+INSERT INTO item (id, product_id, supplier_cnpj, employee_cpf, created_at) VALUES
+('1a2b3c4d5e6f7g8h9i0j1k', 'AyAurtQGureTsGruqGqabvE', '78.907.424/0001-21', '302.411.040-25', '2022-01-01 00:00:00'),
+('2b3c4d5e6f7g8h9i0j1k2l', 'MY26fVpYMBRE5dJUJ3DfMCC', '58.194.520/0001-62', '302.411.040-25', '2023-05-01 00:00:00'),
+('3c4d5e6f7g8h9i0j1k2l3m', 'Rh7dUcHQ975K2WXbECF7wAV', '85.893.777/0001-85', '302.411.040-25', '2023-08-20 00:00:00'),
+('4d5e6f7g8h9i0j1k2l3m4n', 'kt64HYU56aUEhEY6Mez5n8m', '71.265.232/0001-10', '302.411.040-25', '2024-01-15 00:00:00'),
+('5e6f7g8h9i0j1k2l3m4n5o', '7FvgvE83SNpQZfKwWPQ5ebP', '76.043.670/0001-57', '302.411.040-25', '2024-02-01 00:00:00'),
+('6f7g8h9i0j1k2l3m4n5o6p', 'qURnfEbrC8msnVmqPhskXcE', '02.206.558/0001-53', '302.411.040-25', '2024-03-01 00:00:00'),
+('7g8h9i0j1k2l3m4n5o6p7q', 'WnQYM5rmMa5F88GmwGFqevf', '77.209.429/0001-18', '302.411.040-25', '2024-04-01 00:00:00'),
+('8h9i0j1k2l3m4n5o6p7q8r', 'AyAurtQGureTsGruqGqabvE', '78.907.424/0001-21', '302.411.040-25', '2024-05-01 00:00:00'),
+('9i0j1k2l3m4n5o6p7q8r9s', 'MY26fVpYMBRE5dJUJ3DfMCC', '58.194.520/0001-62', '302.411.040-25', '2024-06-01 00:00:00'),
+('0j1k2l3m4n5o6p7q8r9s0t', 'Rh7dUcHQ975K2WXbECF7wAV', '85.893.777/0001-85', '302.411.040-25', '2024-07-01 00:00:00'),
+('1k2l3m4n5o6p7q8r9s0t1u', 'kt64HYU56aUEhEY6Mez5n8m', '71.265.232/0001-10', '302.411.040-25', '2024-07-01 00:00:00'),
+('2l3m4n5o6p7q8r9s0t1u2v', '7FvgvE83SNpQZfKwWPQ5ebP', '76.043.670/0001-57', '302.411.040-25', '2024-07-01 00:00:00'),
+('3m4n5o6p7q8r9s0t1u2v3w', 'qURnfEbrC8msnVmqPhskXcE', '02.206.558/0001-53', '302.411.040-25', '2024-07-01 00:00:00'),
+('4n5o6p7q8r9s0t1u2v3w4x', 'WnQYM5rmMa5F88GmwGFqevf', '77.209.429/0001-18', '302.411.040-25', '2024-07-01 00:00:00');
+
+
+
+-- POPULAR DISCARDS
+INSERT INTO discard (employee_cpf, item_id, discard_reason) VALUES
+('302.411.040-25', '1a2b3c4d5e6f7g8h9i0j1k', 'Loss'),
+('302.411.040-25', '2b3c4d5e6f7g8h9i0j1k2l', 'Bad Conditioning');
+
+-- POPULAR CLIENTS
+INSERT INTO client (id, name, phone, email, cpf, cnpj) VALUES
+('Gb7G4enpkCDJDAJs6Nucfff', 'João Pedro', '(87) 97696-8526', 'joao.pedro@example.com', '700.074.620-34', NULL),
+('mfFBn4FjSTTGHfka21Z5gSh', 'Luiz Vinicius', '(98) 97167-6246', 'luiz.vinicius@example.com', '782.441.400-03', NULL),
+('nfzgCh7yNatb7hg8Ku5j7M4', 'Kabum', '(83) 96910-7542', 'kabum@example.com', NULL, '18.352.796/0001-07');
+
+-- POPULAR DELIVERY ADDRESSES
+INSERT INTO delivery_address (id, recipient_name, state, city, zip, street, number, details, client_id) VALUES
+('KvfGuzZbr5qjGsVKcugKE3t', 'João Pedro', 'SP', 'São Paulo', '01001-000', 'Rua Augusta', '1000', 'Apto 101', 'Gb7G4enpkCDJDAJs6Nucfff'),
+('Cfe5VNzHM5fAncuJQ7PTH5H', 'Luiz Vinicius', 'SP', 'São Paulo', '01001-000', 'Rua Augusta', '1000', 'Apto 101', 'mfFBn4FjSTTGHfka21Z5gSh'),
+('E8Cmvneue3nuyuaCnfQPypP', 'Kabum', 'SP', 'São Paulo', '01001-000', 'Rua Augusta', '1000', 'Apto 101', 'nfzgCh7yNatb7hg8Ku5j7M4');
+
+-- POPULAR CARRIERS
+INSERT INTO carrier (cnpj, name, phone, email) VALUES
+('25.636.662/0001-83', 'Correios', '(19) 99941-2621', 'correios@example.com'),
+('09.604.111/0001-81', 'Fedex', '(32) 97494-8955', 'fedex@example.com'),
+('69.715.892/0001-03', 'DHL', '(47) 98298-9111', 'dhl@example.com');
+
+-- POPULAR ORDERS
+INSERT INTO orders (id, client_id, employee_cpf, delivery_address_id, carrier_cnpj, tracking_code) VALUES
+('7Fh4Z4nv6pKnvFRU15mW95y', 'Gb7G4enpkCDJDAJs6Nucfff', '302.411.040-25', 'KvfGuzZbr5qjGsVKcugKE3t', '25.636.662/0001-83', '55e524c7-1f2b-46a4-80e9-186d47c5a222'),
+('7Nyj9H5Vnzjq5Z1j99N29Mf', 'mfFBn4FjSTTGHfka21Z5gSh', '302.411.040-25', 'Cfe5VNzHM5fAncuJQ7PTH5H', '09.604.111/0001-81', 'ff6ee794-1a9d-4db9-bfa9-0db64d1d1cd6');
+
+-- POPULAR ORDERED ITEMS
+INSERT INTO ordered_item (item_id, order_id) VALUES
+('3c4d5e6f7g8h9i0j1k2l3m', '7Fh4Z4nv6pKnvFRU15mW95y'),
+('6f7g8h9i0j1k2l3m4n5o6p', '7Nyj9H5Vnzjq5Z1j99N29Mf');

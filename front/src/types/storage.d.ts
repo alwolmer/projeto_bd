@@ -70,3 +70,13 @@ export interface Order {
   createdAt?: Date;
   updatedAt?: Date;
 }
+
+export interface ClientStats {
+  clientType: string;
+  clientCount: number;
+}
+
+export interface StockStats {
+  date: Date;
+  itemCount: number;
+}

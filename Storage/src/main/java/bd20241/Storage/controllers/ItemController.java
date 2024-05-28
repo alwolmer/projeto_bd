@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import bd20241.Storage.models.Item;
 import bd20241.Storage.payloads.requests.CreateItemRequest;
+import bd20241.Storage.payloads.responses.StockStatsResponse;
 import bd20241.Storage.services.ItemService;
 
 @RestController
@@ -48,6 +49,11 @@ public class ItemController {
     @GetMapping("/stock")
     public ResponseEntity<List<Item>> getStock() {
         return ResponseEntity.ok(itemService.getStock());
+    }
+
+    @GetMapping("/stock/stats")
+    public ResponseEntity<List<StockStatsResponse>> getStockStats() {
+        return ResponseEntity.ok(itemService.getStockStats());
     }
     
 }

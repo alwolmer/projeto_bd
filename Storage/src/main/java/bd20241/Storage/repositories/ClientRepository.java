@@ -10,6 +10,7 @@ import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Repository;
 
 import bd20241.Storage.models.Client;
+import bd20241.Storage.payloads.responses.ClientStatsResponse;
 
 @Repository
 public class ClientRepository {
@@ -49,6 +50,11 @@ public class ClientRepository {
         return jdbcTemplate.query(sql, new ClientRowMapper());
     }
 
+    public List<ClientStatsResponse> findStats() {
+        String sql = "SELECT CASE WHEN c.cpf IS NOT NULL THEN 'CPF' WHEN c.cnpj IS NOT NULL THEN 'CNPJ' END AS client_type, COUNT(c.id) AS client_count FROM client c GROUP BY client_type";
+        return jdbcTemplate.query(sql, new ClientStatsRowMapper());
+    }
+
     private static class ClientRowMapper implements RowMapper<Client> {
         @Override
         public Client mapRow(@NonNull ResultSet rs, int rowNum) throws SQLException {
@@ -60,6 +66,16 @@ public class ClientRepository {
             client.setCpf(rs.getString("cpf"));
             client.setCnpj(rs.getString("cnpj"));
             return client;
+        }
+    }
+
+    private static class ClientStatsRowMapper implements RowMapper<ClientStatsResponse> {
+        @Override
+        public ClientStatsResponse mapRow(@NonNull ResultSet rs, int rowNum) throws SQLException {
+            ClientStatsResponse clientStats = new ClientStatsResponse();
+            clientStats.setClientCount(rs.getInt("client_count"));
+            clientStats.setClientType(rs.getString("client_type"));
+            return clientStats;
         }
     }
     

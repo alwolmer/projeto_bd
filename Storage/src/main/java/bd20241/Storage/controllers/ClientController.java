@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import bd20241.Storage.models.Client;
+import bd20241.Storage.payloads.responses.ClientStatsResponse;
 import bd20241.Storage.services.ClientService;
 
 @RestController
@@ -44,6 +45,11 @@ public class ClientController {
     public ResponseEntity<Client> updateClient(@PathVariable String id, @RequestBody Client client) {
         client.setId(id);
         return ResponseEntity.ok(clientService.updateClient(client));
+    }
+
+    @GetMapping("/stats")
+    public ResponseEntity<List<ClientStatsResponse>> getClientStats() {
+        return ResponseEntity.ok(clientService.getClientStats());
     }
     
 }

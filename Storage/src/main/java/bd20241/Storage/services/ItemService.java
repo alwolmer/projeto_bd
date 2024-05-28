@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 
 import bd20241.Storage.models.Item;
 import bd20241.Storage.payloads.requests.CreateItemRequest;
+import bd20241.Storage.payloads.responses.StockStatsResponse;
 import bd20241.Storage.repositories.ItemRepository;
 import bd20241.Storage.utils.NanoId;
 
@@ -31,6 +32,10 @@ public class ItemService {
 
     public List<Item> getStock() {
         return itemRepository.findStock();
+    }
+
+    public List<StockStatsResponse> getStockStats() {
+        return itemRepository.findStockStats();
     }
     
 }

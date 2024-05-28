@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import bd20241.Storage.models.Client;
+import bd20241.Storage.payloads.responses.ClientStatsResponse;
 import bd20241.Storage.repositories.ClientRepository;
 import bd20241.Storage.utils.NanoId;
 
@@ -37,6 +38,10 @@ public class ClientService {
 
     public List<Client> getAllClients() {
         return clientRepository.findAll();
+    }
+
+    public List<ClientStatsResponse> getClientStats() {
+        return clientRepository.findStats();
     }
     
 }

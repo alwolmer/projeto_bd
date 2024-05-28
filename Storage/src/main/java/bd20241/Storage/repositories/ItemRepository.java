@@ -11,6 +11,7 @@ import org.springframework.stereotype.Repository;
 
 import bd20241.Storage.models.Item;
 import bd20241.Storage.payloads.requests.CreateItemRequest;
+import bd20241.Storage.payloads.responses.StockStatsResponse;
 
 @Repository
 public class ItemRepository {
@@ -42,6 +43,11 @@ public class ItemRepository {
         return jdbcTemplate.query(sql, new ItemRowMapper());
     }
 
+    public List<StockStatsResponse> findStockStats() {
+        String sql = "SELECT DATE(i.created_at) AS date, COUNT(i.id) AS item_count FROM item i LEFT JOIN discard d ON i.id = d.item_id LEFT JOIN ordered_item oi ON i.id = oi.item_id WHERE d.item_id IS NULL AND oi.item_id IS NULL GROUP BY DATE(i.created_at) ORDER BY date";
+        return jdbcTemplate.query(sql, new StockStatsRowMapper());
+    }
+
 
     private static class ItemRowMapper implements RowMapper<Item> {
         @Override
@@ -56,5 +62,15 @@ public class ItemRepository {
             return item;
         }
     }
-        
+
+    private static class StockStatsRowMapper implements RowMapper<StockStatsResponse> {
+        @Override
+        public StockStatsResponse mapRow(@NonNull ResultSet rs, int rowNum) throws SQLException {
+            StockStatsResponse stockStatsResponse = new StockStatsResponse();
+            stockStatsResponse.setDate(rs.getDate("date"));
+            stockStatsResponse.setItemCount(rs.getInt("item_count"));
+            return stockStatsResponse;
+        }
+    }
+
 }

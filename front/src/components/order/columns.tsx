@@ -28,7 +28,7 @@ export const columns: ColumnDef<Order>[] = [
   },
   {
     header: "Delivery Address ID",
-    accessorKey: "deliveryAddressCnpj",
+    accessorKey: "deliveryAddressId",
   },
   {
     header: "Employee CPF",

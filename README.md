@@ -897,9 +897,9 @@ Banco de dados
 Backend
 ```
 # ./projeto_bd/Storage
-mvn install
+./mvnw install
 # THEN
-mvn spring-boot:run
+./mvnw spring-boot:run
 ```
 
 Frontend

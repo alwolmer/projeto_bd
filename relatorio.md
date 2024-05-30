@@ -770,6 +770,6 @@ DELIMITER ;
        - Framework: SpringBoot (Maven).
       -  Sem uso de ORM, mas preservando arquitetura do Springboot (controllers-services-repositories), classes JDBC para acesso direto ao banco de dados com queries SQL escritas à mão.
    3. Banco de dados:
-      - Docker Compose para orquestrar os containers do backend, frontend e banco de dados (inclusive execução automática do script de inicialização)
+      - Docker Compose para orquestrar o containers do banco de dados (inclusive execução automática do script de inicialização)
       - Triggers para garantir integridade do banco dentro das regras de negócio e impedir a invalidação da funcionalidade do histórico de estoque
       - Procedures e views para extração de relatórios
